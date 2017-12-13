@@ -9,10 +9,7 @@ install:
 before_build:
   - nuget restore
   - ps: gitversion /l console /output buildserver /UpdateVersionProperties
-
-environment:
-  PackageVersion:
-    
+  - ps: $env:PackageVersion=$env:GitVersion_NuGetVersionV2
 
 build:
   verbosity: minimal
