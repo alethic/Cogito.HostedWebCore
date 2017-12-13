@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net30</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>Cogito</Company>
+    <Authors>Jerome Haltom</Authors>
+    <Description>Provides routines to initialize and host the IIS Hosted Web Core.</Description>
+    <Copyright>Jerome Haltom</Copyright>
   </PropertyGroup>
 
 </Project>
