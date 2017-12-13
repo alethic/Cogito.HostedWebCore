@@ -43,7 +43,7 @@ namespace Cogito.HostedWebCore
         public static bool IsActivated => HostedWebCoreInternal.IsActivated;
 
         /// <summary>
-        /// Starts the hosted web server.
+        /// Starts the hosted web server. 
         /// </summary>
         public static void Start()
         {
