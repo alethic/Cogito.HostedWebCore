@@ -8,7 +8,11 @@ install:
 
 before_build:
   - nuget restore
-  - ps: gitversion /l console /output buildserver
+  - ps: gitversion /l console /output buildserver /UpdateVersionProperties
+
+environment:
+  PackageVersion:
+    
 
 build:
   verbosity: minimal
