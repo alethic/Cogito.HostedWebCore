@@ -12,7 +12,7 @@ namespace Cogito.HostedWebCore.Tests
         {
             new WebHostBuilder()
                 .Configure(c => c
-                    .SetBindingInformation("localhost", 12346)
+                    .SetBindingInformation("localhost", 12311)
                     .ConfigureVirtualDirectory("/", v => v.UsePhysicalPath("wwwroot"))
                     .UseFailedRequestLogging(@"%TEMP%\log.txt"))
                 .Build()
