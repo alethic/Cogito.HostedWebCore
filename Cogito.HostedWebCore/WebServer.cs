@@ -168,7 +168,7 @@ namespace Cogito.HostedWebCore
             public static bool IsActivated => isActiviated;
 
             /// <summary>
-            /// Activate the HWC
+            /// Activate the HWC.
             /// </summary>
             /// <param name="appHostConfig">Path to ApplicationHost.config to use</param>
             /// <param name="rootWebConfig">Path to the Root Web.config to use</param>
@@ -183,7 +183,7 @@ namespace Cogito.HostedWebCore
             }
 
             /// <summary>
-            /// Shutdown HWC
+            /// Shutdown HWC.
             /// </summary>
             public static void Shutdown(bool immediate)
             {
