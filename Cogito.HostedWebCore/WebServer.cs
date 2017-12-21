@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace Cogito.HostedWebCore
 {
@@ -11,13 +15,16 @@ namespace Cogito.HostedWebCore
     public static class WebServer
     {
 
+        static readonly string HWEBCORE = Environment.ExpandEnvironmentVariables(@"%WINDIR%\system32\inetsrv\hwebcore.dll");
+        static readonly string SYSTEM_WEB_CONFIG = Environment.ExpandEnvironmentVariables(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), @"config\web.config"));
+
         /// <summary>
         /// Initializes the static instance.
         /// </summary>
         static WebServer()
         {
             ApplicationHostConfigPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".config");
-            RootWebConfigPath = Environment.ExpandEnvironmentVariables(@"%WINDIR%\Microsoft.Net\Framework\v4.0.30319\config\web.config");
+            RootWebConfigPath = Environment.ExpandEnvironmentVariables(SYSTEM_WEB_CONFIG);
             InstanceName = Guid.NewGuid().ToString();
         }
 
@@ -56,12 +63,62 @@ namespace Cogito.HostedWebCore
             if (HostedWebCoreInternal.IsActivated)
                 throw new InvalidOperationException("Hostable Web Core is already running.");
 
+            if (File.Exists(HWEBCORE) == false)
+                throw new FileNotFoundException("Unable to find IIS Hostable Web Core entry point. Ensure IIS Hostable Web Core is installed.");
+            if (File.Exists(SYSTEM_WEB_CONFIG) == false)
+                throw new FileNotFoundException("Unable to find default system Web.config file.");
             if (File.Exists(ApplicationHostConfigPath) == false)
                 throw new FileNotFoundException("Cannot find ApplicationHostConfigPath file.");
             if (File.Exists(RootWebConfigPath) == false)
                 throw new FileNotFoundException("Cannot find RootWebConfigPath file.");
 
-            HostedWebCoreInternal.Activate(ApplicationHostConfigPath, RootWebConfigPath, InstanceName);
+            ValidateFilesExist(
+                "configuration/system.webServer/globalModules",
+                XDocument.Load(ApplicationHostConfigPath)
+                    .Elements("configuration")
+                    .Elements("system.webServer")
+                    .Elements("globalModules")
+                    .Elements("add")
+                    .Select(i => ((string)i.Attribute("name"), (string)i.Attribute("image")))
+                    .Where(i => !string.IsNullOrWhiteSpace(i.Item2)));
+
+            ValidateFilesExist(
+                "configuration/system.webServer/isapiFilters",
+                XDocument.Load(ApplicationHostConfigPath)
+                    .Elements("configuration")
+                    .Elements("system.webServer")
+                    .Elements("isapiFilters")
+                    .Elements("filter")
+                    .Select(i => ((string)i.Attribute("name"), (string)i.Attribute("path")))
+                    .Where(i => !string.IsNullOrWhiteSpace(i.Item2)));
+
+            ValidateFilesExist(
+                "configuration/location/system.webServer/handlers",
+                XDocument.Load(ApplicationHostConfigPath)
+                    .Elements("configuration")
+                    .Elements("location")
+                    .Elements("system.webServer")
+                    .Elements("handlers")
+                    .Elements("add")
+                    .Select(i => ((string)i.Attribute("name"), (string)i.Attribute("scriptProcessor")))
+                    .Where(i => !string.IsNullOrWhiteSpace(i.Item2)));
+
+            HostedWebCoreInternal.Activate(
+                ApplicationHostConfigPath,
+                RootWebConfigPath,
+                InstanceName);
+        }
+
+        /// <summary>
+        /// Validate that each of the specified files exists.
+        /// </summary>
+        /// <param name="category"></param>
+        /// <param name="namesAndPaths"></param>
+        static void ValidateFilesExist(string category, IEnumerable<(string Name, string Path)> namesAndPaths)
+        {
+            foreach (var kvp in namesAndPaths)
+                if (File.Exists(kvp.Path) == false)
+                    throw new FileNotFoundException($"Validating {category}. Missing file for {kvp.Name}.", kvp.Path);
         }
 
         /// <summary>
@@ -92,15 +149,17 @@ namespace Cogito.HostedWebCore
             /// </summary>
             static HostedWebCoreInternal()
             {
-                // Load the library and get the function pointers for the WebCore entry points
-                const string HWCPath = @"%windir%\system32\inetsrv\hwebcore.dll";
-                IntPtr hwc = NativeMethods.LoadLibrary(Environment.ExpandEnvironmentVariables(HWCPath));
+                var hwc = NativeMethods.LoadLibrary(HWEBCORE);
+                if (hwc == IntPtr.Zero)
+                    throw new InvalidOperationException("Error returned from LoadLibrary for Hosted Web Core.");
 
-                IntPtr procaddr = NativeMethods.GetProcAddress(hwc, "WebCoreActivate");
-                WebCoreActivate = (FnWebCoreActivate)Marshal.GetDelegateForFunctionPointer(procaddr, typeof(FnWebCoreActivate));
+                WebCoreActivate = (FnWebCoreActivate)Marshal.GetDelegateForFunctionPointer(
+                    NativeMethods.GetProcAddress(hwc, "WebCoreActivate"),
+                    typeof(FnWebCoreActivate));
 
-                procaddr = NativeMethods.GetProcAddress(hwc, "WebCoreShutdown");
-                WebCoreShutdown = (FnWebCoreShutdown)Marshal.GetDelegateForFunctionPointer(procaddr, typeof(FnWebCoreShutdown));
+                WebCoreShutdown = (FnWebCoreShutdown)Marshal.GetDelegateForFunctionPointer(
+                    NativeMethods.GetProcAddress(hwc, "WebCoreShutdown"),
+                    typeof(FnWebCoreShutdown));
             }
 
             /// <summary>

@@ -1,12 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net30</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company>Cogito</Company>
     <Authors>Jerome Haltom</Authors>
     <Description>Provides routines to initialize and host the IIS Hosted Web Core.</Description>
     <Copyright>Jerome Haltom</Copyright>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+    <PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
+    <PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
+  </ItemGroup>
 
 </Project>
