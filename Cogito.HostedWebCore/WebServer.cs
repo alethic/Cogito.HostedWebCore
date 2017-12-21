@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
-using System.Xml.XPath;
 
 namespace Cogito.HostedWebCore
 {
@@ -117,7 +117,7 @@ namespace Cogito.HostedWebCore
         static void ValidateFilesExist(string category, IEnumerable<(string Name, string Path)> namesAndPaths)
         {
             foreach (var kvp in namesAndPaths)
-                if (File.Exists(kvp.Path) == false)
+                if (File.Exists(Environment.ExpandEnvironmentVariables(kvp.Path)) == false)
                     throw new FileNotFoundException($"Validating {category}. Missing file for {kvp.Name}.", kvp.Path);
         }
 
