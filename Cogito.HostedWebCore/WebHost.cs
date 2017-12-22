@@ -3,6 +3,8 @@ using System.IO;
 using System.Threading;
 using System.Xml.Linq;
 
+using Microsoft.Extensions.Logging;
+
 namespace Cogito.HostedWebCore
 {
 
@@ -26,16 +28,14 @@ namespace Cogito.HostedWebCore
         /// <summary>
         /// Runs the web host.
         /// </summary>
-        /// <param name="host"></param>
-        /// <param name="port"></param>
-        /// <param name="physicalPath"></param>
+        /// <param name="logger"></param>
         /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public void Run(CancellationToken cancellationToken = default)
+        public void Run(ILogger logger = null, CancellationToken cancellationToken = default)
         {
             // save settings to default configuration location
             try
             {
+                logger?.LogInformation("Saving temporary application host configuration to {0}", WebServer.ApplicationHostConfigPath);
                 configuration.Save(WebServer.ApplicationHostConfigPath);
             }
             catch (IOException e)
@@ -49,7 +49,10 @@ namespace Cogito.HostedWebCore
                     throw new WebHostException("WebHost is already activated within this process.");
 
                 if (cancellationToken.IsCancellationRequested == false)
+                {
+                    logger?.LogInformation("Starting WebHost...");
                     WebServer.Start();
+                }
 
                 while (cancellationToken.IsCancellationRequested == false)
                 {
@@ -67,7 +70,10 @@ namespace Cogito.HostedWebCore
             finally
             {
                 if (WebServer.IsActivated)
+                {
+                    logger?.LogInformation("Stopping WebHost...");
                     WebServer.Stop();
+                }
             }
         }
 
