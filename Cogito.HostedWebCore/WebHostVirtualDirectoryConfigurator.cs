@@ -21,6 +21,12 @@ namespace Cogito.HostedWebCore
         }
 
         /// <summary>
+        /// Returns the configuration.
+        /// </summary>
+        /// <returns></returns>
+        public XDocument Element => element;
+
+        /// <summary>
         /// Configures this virtual directory to point to the specified physical path.
         /// </summary>
         /// <param name="physicalPath"></param>

@@ -26,7 +26,7 @@ namespace Cogito.HostedWebCore
         /// <summary>
         /// Gets the root configuration element.
         /// </summary>
-        public XElement RootElement => config.Root;
+        public XElement Element => config.Root;
 
         /// <summary>
         /// Gets the single site element.
@@ -85,15 +85,6 @@ namespace Cogito.HostedWebCore
 
             configure?.Invoke(new WebHostApplicationConfigurator(e));
             return this;
-        }
-
-        /// <summary>
-        /// Returns the configuration.
-        /// </summary>
-        /// <returns></returns>
-        internal XDocument GetConfiguration()
-        {
-            return config;
         }
 
     }

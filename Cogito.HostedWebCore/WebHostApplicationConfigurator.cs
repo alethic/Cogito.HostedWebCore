@@ -20,6 +20,12 @@ namespace Cogito.HostedWebCore
         }
 
         /// <summary>
+        /// Returns the configuration.
+        /// </summary>
+        /// <returns></returns>
+        public XDocument Element => element;
+
+        /// <summary>
         /// Configures a virtual directory.
         /// </summary>
         /// <param name="path"></param>
