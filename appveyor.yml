@@ -6,9 +6,10 @@ install:
   - choco install gitversion.portable -pre -y
 
 before_build:
-  - nuget restore
   - ps: gitversion /l console /output buildserver
   - ps: $env:PackageVersion=$env:GitVersion_NuGetVersionV2
+  - nuget restore
+  - dotnet restore
 
 build:
   verbosity: minimal
