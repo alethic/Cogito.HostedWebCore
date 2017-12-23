@@ -34,11 +34,6 @@ namespace Cogito.HostedWebCore
         public XElement SiteElement => config.XPathSelectElement("/configuration/system.applicationHost/sites/site[@id='1']");
 
         /// <summary>
-        /// Gets the single site application element.
-        /// </summary>
-        public XElement SiteApplicationElement => SiteElement.Element("application");
-
-        /// <summary>
         /// Sets the binding information on the site.
         /// </summary>
         /// <param name="value"></param>
@@ -70,22 +65,25 @@ namespace Cogito.HostedWebCore
         }
 
         /// <summary>
-        /// Configures a virtual directory.
+        /// Configures an application.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public WebHostConfigurator ConfigureVirtualDirectory(string path, Action<WebHostVirtualDirectoryConfigurator> configure)
+        public WebHostConfigurator Application(string path, Action<WebHostApplicationConfigurator> configure = null)
         {
-            var element = SiteApplicationElement
-                .Elements("virtualDirectory")
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException(nameof(path));
+
+            var e = SiteElement
+                .Elements("application")
                 .FirstOrDefault(i => (string)i.Attribute("path") == path);
-            if (element == null)
-                SiteApplicationElement.Add(
-                    element = new XElement("virtualDirectory",
+            if (e == null)
+                SiteElement.Add(e =
+                    new XElement("application",
                         new XAttribute("path", path)));
 
-            configure?.Invoke(new WebHostVirtualDirectoryConfigurator(element));
+            configure?.Invoke(new WebHostApplicationConfigurator(e));
             return this;
         }
 

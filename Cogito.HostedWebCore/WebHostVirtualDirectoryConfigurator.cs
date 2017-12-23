@@ -21,7 +21,7 @@ namespace Cogito.HostedWebCore
         }
 
         /// <summary>
-        /// Configures this virtual directory at the specified path.
+        /// Configures this virtual directory to point to the specified physical path.
         /// </summary>
         /// <param name="physicalPath"></param>
         /// <returns></returns>
