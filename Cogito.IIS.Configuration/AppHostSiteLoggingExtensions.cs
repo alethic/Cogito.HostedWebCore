@@ -1,9 +1,9 @@
 ﻿using System.Xml.Linq;
 
-namespace Cogito.HostedWebCore
+namespace Cogito.IIS.Configuration
 {
 
-    public static class WebHostLoggingExtensions
+    public static class AppHostSiteLoggingExtensions
     {
 
         /// <summary>
@@ -12,10 +12,10 @@ namespace Cogito.HostedWebCore
         /// <param name="configurator"></param>
         /// <param name="directory"></param>
         /// <returns></returns>
-        public static WebHostConfigurator UseFailedRequestLogging(this WebHostConfigurator configurator, string directory)
+        public static AppHostSiteConfigurator UseFailedRequestLogging(this AppHostSiteConfigurator configurator, string directory)
         {
-            configurator.SiteElement.Elements("traceFailedRequestsLogging").Remove();
-            configurator.SiteElement.Add(new XElement("traceFailedRequestsLogging",
+            configurator.Element.Elements("traceFailedRequestsLogging").Remove();
+            configurator.Element.Add(new XElement("traceFailedRequestsLogging",
                 new XAttribute("enabled", true),
                 new XAttribute("directory", directory)));
             return configurator;

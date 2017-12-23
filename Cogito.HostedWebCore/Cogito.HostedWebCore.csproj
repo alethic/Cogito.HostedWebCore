@@ -32,4 +32,8 @@
     <PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Cogito.IIS.Configuration\Cogito.IIS.Configuration.csproj" />
+  </ItemGroup>
+
 </Project>

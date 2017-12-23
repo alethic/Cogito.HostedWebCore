@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.27110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cogito.HostedWebCore", "Cogito.HostedWebCore\Cogito.HostedWebCore.csproj", "{B125E1FE-FF08-4DF9-9416-7C571492D961}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cogito.HostedWebCore.Tests", "Cogito.HostedWebCore.Tests\Cogito.HostedWebCore.Tests.csproj", "{5A8A36F5-D7B6-474B-8F8D-59AF0AEE1B91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cogito.HostedWebCore.Tests", "Cogito.HostedWebCore.Tests\Cogito.HostedWebCore.Tests.csproj", "{5A8A36F5-D7B6-474B-8F8D-59AF0AEE1B91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cogito.IIS.Configuration", "Cogito.IIS.Configuration\Cogito.IIS.Configuration.csproj", "{7067187B-B930-4E71-BD61-548F340CE718}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5A8A36F5-D7B6-474B-8F8D-59AF0AEE1B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A8A36F5-D7B6-474B-8F8D-59AF0AEE1B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A8A36F5-D7B6-474B-8F8D-59AF0AEE1B91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7067187B-B930-4E71-BD61-548F340CE718}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7067187B-B930-4E71-BD61-548F340CE718}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7067187B-B930-4E71-BD61-548F340CE718}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7067187B-B930-4E71-BD61-548F340CE718}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

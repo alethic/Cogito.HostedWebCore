@@ -3,10 +3,10 @@ using System.IO;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace Cogito.HostedWebCore
+namespace Cogito.IIS.Configuration
 {
 
-    public class WebHostVirtualDirectoryConfigurator
+    public class AppHostVirtualDirectoryConfigurator
     {
 
         readonly XElement element;
@@ -15,7 +15,7 @@ namespace Cogito.HostedWebCore
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public WebHostVirtualDirectoryConfigurator(XElement element)
+        public AppHostVirtualDirectoryConfigurator(XElement element)
         {
             this.element = element ?? throw new ArgumentNullException(nameof(element));
         }
@@ -31,7 +31,7 @@ namespace Cogito.HostedWebCore
         /// </summary>
         /// <param name="physicalPath"></param>
         /// <returns></returns>
-        public WebHostVirtualDirectoryConfigurator UsePhysicalPath(string physicalPath)
+        public AppHostVirtualDirectoryConfigurator UsePhysicalPath(string physicalPath)
         {
             if (string.IsNullOrWhiteSpace(physicalPath))
                 throw new ArgumentException(nameof(physicalPath));

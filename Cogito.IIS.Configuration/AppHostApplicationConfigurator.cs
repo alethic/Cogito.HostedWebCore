@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Cogito.HostedWebCore
+namespace Cogito.IIS.Configuration
 {
 
-    public class WebHostApplicationConfigurator
+    public class AppHostApplicationConfigurator
     {
 
         readonly XElement element;
@@ -14,7 +14,7 @@ namespace Cogito.HostedWebCore
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public WebHostApplicationConfigurator(XElement element)
+        public AppHostApplicationConfigurator(XElement element)
         {
             this.element = element ?? throw new ArgumentNullException(nameof(element));
         }
@@ -31,7 +31,7 @@ namespace Cogito.HostedWebCore
         /// <param name="path"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public WebHostApplicationConfigurator VirtualDirectory(string path, Action<WebHostVirtualDirectoryConfigurator> configure = null)
+        public AppHostApplicationConfigurator VirtualDirectory(string path, Action<AppHostVirtualDirectoryConfigurator> configure = null)
         {
             if (string.IsNullOrWhiteSpace(path))
                 throw new ArgumentException(nameof(path));
@@ -44,7 +44,7 @@ namespace Cogito.HostedWebCore
                     new XElement("virtualDirectory",
                         new XAttribute("path", path)));
 
-            configure?.Invoke(new WebHostVirtualDirectoryConfigurator(e));
+            configure?.Invoke(new AppHostVirtualDirectoryConfigurator(e));
             return this;
         }
 

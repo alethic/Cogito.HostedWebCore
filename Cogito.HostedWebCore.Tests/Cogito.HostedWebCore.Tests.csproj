@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cogito.HostedWebCore\Cogito.HostedWebCore.csproj" />
+    <ProjectReference Include="..\Cogito.IIS.Configuration\Cogito.IIS.Configuration.csproj" />
   </ItemGroup>
 
 </Project>
