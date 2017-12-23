@@ -17,7 +17,7 @@ namespace Cogito.IIS.Configuration
         {
             if (string.IsNullOrWhiteSpace(host))
                 throw new ArgumentException(nameof(host));
-            if (port < 1)
+            if (port < 1 || port > 65535)
                 throw new ArgumentOutOfRangeException(nameof(port));
 
             return self.AddBinding("http", $"*:{port}:{host}");
@@ -34,7 +34,7 @@ namespace Cogito.IIS.Configuration
         {
             if (string.IsNullOrWhiteSpace(host))
                 throw new ArgumentException(nameof(host));
-            if (port < 1)
+            if (port < 1 || port > 65535)
                 throw new ArgumentOutOfRangeException(nameof(port));
 
             return self.AddBinding("https", $"*:{port}:{host}");

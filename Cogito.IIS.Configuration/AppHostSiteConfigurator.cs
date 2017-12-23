@@ -70,12 +70,15 @@ namespace Cogito.IIS.Configuration
         /// <returns></returns>
         public AppHostSiteConfigurator AddBinding(string protocol, string bindingInformation)
         {
+            if (string.IsNullOrWhiteSpace(protocol))
+                throw new ArgumentException(nameof(protocol));
             if (string.IsNullOrWhiteSpace(bindingInformation))
                 throw new ArgumentException(nameof(bindingInformation));
 
             BindingElement.Add(new XElement("binding",
                 new XAttribute("protocol", protocol),
                 new XAttribute("bindingInformation", bindingInformation)));
+
             return this;
         }
 
