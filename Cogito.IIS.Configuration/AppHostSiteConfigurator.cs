@@ -26,19 +26,88 @@ namespace Cogito.IIS.Configuration
         /// <returns></returns>
         public XElement Element => element;
 
+        public AppHostSiteConfigurator SetName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException(nameof(name));
+
+            element.SetAttributeValue("name", name);
+            return this;
+        }
+
+        /// <summary>
+        /// Gets the binding element.
+        /// </summary>
+        XElement BindingElement
+        {
+            get
+            {
+                var e = element
+                    .Elements("bindings")
+                    .FirstOrDefault();
+                if (e == null)
+                    element.Add(e =
+                        new XElement("bindings"));
+
+                return e;
+            }
+        }
+
+        /// <summary>
+        /// Removes the configured bindings.
+        /// </summary>
+        /// <returns></returns>
+        public AppHostSiteConfigurator RemoveBindings()
+        {
+            BindingElement.Elements("binding").Remove();
+            return this;
+        }
+
         /// <summary>
         /// Sets the binding information on the site.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="bindingInformation"></param>
         /// <returns></returns>
-        public AppHostSiteConfigurator SetBindingInformation(string value)
+        public AppHostSiteConfigurator AddBinding(string protocol, string bindingInformation)
         {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException(nameof(value));
+            if (string.IsNullOrWhiteSpace(bindingInformation))
+                throw new ArgumentException(nameof(bindingInformation));
 
-            element
-                .XPathSelectElement("bindings/binding[@protocol='http']")
-                .SetAttributeValue("bindingInformation", value);
+            BindingElement.Add(new XElement("binding",
+                new XAttribute("protocol", protocol),
+                new XAttribute("bindingInformation", bindingInformation)));
+            return this;
+        }
+
+        /// <summary>
+        /// Removes the binding with the specified information.
+        /// </summary>
+        /// <param name="protocol"></param>
+        /// <param name="bindingInformation"></param>
+        /// <returns></returns>
+        public AppHostSiteConfigurator RemoveBindings(string protocol)
+        {
+            BindingElement
+                .Elements("binding")
+                .Where(i => (string)i.Attribute("protocol") == protocol)
+                .Remove();
+
+            return this;
+        }
+
+        /// <summary>
+        /// Removes the binding with the specified information.
+        /// </summary>
+        /// <param name="protocol"></param>
+        /// <param name="bindingInformation"></param>
+        /// <returns></returns>
+        public AppHostSiteConfigurator RemoveBindings(string protocol, string bindingInformation)
+        {
+            BindingElement
+                .Elements("binding")
+                .Where(i => (string)i.Attribute("protocol") == protocol)
+                .Where(i => (string)i.Attribute("bindingInformation") == bindingInformation)
+                .Remove();
 
             return this;
         }

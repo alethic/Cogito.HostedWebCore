@@ -11,7 +11,8 @@ namespace Cogito.HostedWebCore.Tests
             new WebHostBuilder()
                 .Configure(c => c
                     .Site(1, s => s
-                        .SetBindingInformation("localhost", 12311)
+                        .RemoveBindings()
+                        .AddHttpBinding("localhost", 12311)
                         .Application("/", a => a
                             .VirtualDirectory("/", v => v.UsePhysicalPath("wwwroot")))
                         .UseFailedRequestLogging(@"%TEMP%\log.txt")))
