@@ -12,26 +12,26 @@ namespace Cogito.HostedWebCore
     public class WebHostConfigurator
     {
 
-        readonly XDocument config;
+        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="config"></param>
-        internal WebHostConfigurator(XDocument config)
+        /// <param name="element"></param>
+        internal WebHostConfigurator(XElement element)
         {
-            this.config = config ?? throw new ArgumentNullException(nameof(config));
+            this.element = element ?? throw new ArgumentNullException(nameof(element));
         }
 
         /// <summary>
         /// Gets the root configuration element.
         /// </summary>
-        public XElement Element => config.Root;
+        public XElement Element => element;
 
         /// <summary>
         /// Gets the single site element.
         /// </summary>
-        public XElement SiteElement => config.XPathSelectElement("/configuration/system.applicationHost/sites/site[@id='1']");
+        public XElement SiteElement => element.XPathSelectElement("/configuration/system.applicationHost/sites/site[@id='1']");
 
         /// <summary>
         /// Sets the binding information on the site.

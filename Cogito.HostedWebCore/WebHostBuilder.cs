@@ -16,10 +16,21 @@ namespace Cogito.HostedWebCore
         /// <param name="applicationHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public WebHostBuilder Configure(XDocument applicationHostConfig, Action<WebHostConfigurator> configure)
+        public WebHostBuilder Configure(XElement applicationHostConfig, Action<WebHostConfigurator> configure)
         {
             configure?.Invoke(configurator = new WebHostConfigurator(applicationHostConfig));
             return this;
+        }
+
+        /// <summary>
+        /// Configures the web host, starting with the specified configuration file.
+        /// </summary>
+        /// <param name="applicationHostConfig"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public WebHostBuilder Configure(XDocument applicationHostConfig, Action<WebHostConfigurator> configure)
+        {
+            return Configure(applicationHostConfig?.Root, configure);
         }
 
         /// <summary>
@@ -65,7 +76,7 @@ namespace Cogito.HostedWebCore
             if (configurator == null)
                 throw new WebHostException("WebHost has not been configured.");
 
-            return new WebHost(configurator.GetConfiguration());
+            return new WebHost(new XDocument(configurator.Element));
         }
 
     }

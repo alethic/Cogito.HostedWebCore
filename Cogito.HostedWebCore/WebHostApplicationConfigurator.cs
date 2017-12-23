@@ -23,7 +23,7 @@ namespace Cogito.HostedWebCore
         /// Returns the configuration.
         /// </summary>
         /// <returns></returns>
-        public XDocument Element => element;
+        public XElement Element => element;
 
         /// <summary>
         /// Configures a virtual directory.
