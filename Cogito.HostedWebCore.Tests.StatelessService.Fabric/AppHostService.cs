@@ -28,13 +28,13 @@ namespace Cogito.HostedWebCore.Tests.StatelessService.Fabric
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
             yield return new ServiceInstanceListener(context =>
-                new AppHostCommunicationListener(context, "ServiceEndpoint", (protocol, bindingInformation, listener) =>
+                new AppHostCommunicationListener(context, "ServiceEndpoint", (protocol, bindingInformation, path, listener) =>
                     new AppHostBuilder()
                         .Configure(c => c
                             .Site(1, s => s
                                 .RemoveBindings()
                                 .AddBinding(protocol, bindingInformation)
-                                .Application("/", a => a
+                                .Application(path, a => a
                                     .VirtualDirectory("/", v => v
                                         .UsePhysicalPath(Path.Combine(Path.GetDirectoryName(typeof(AppHostService).Assembly.Location), "site"))))))
                         .Build()));

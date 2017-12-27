@@ -52,7 +52,7 @@ namespace Cogito.HostedWebCore.ServiceFabric
                 throw new InvalidOperationException("Only HTTP endpoints are supported.");
 
             // host was not created
-            appHost = build("http", $"*:{endpoint.Port}:", this);
+            appHost = build("http", $"*:{endpoint.Port}:", "/", this);
             if (appHost == null)
                 throw new AppHostException("Invalid AppHost.");
 
