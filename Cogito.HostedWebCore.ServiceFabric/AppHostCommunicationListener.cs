@@ -71,7 +71,13 @@ namespace Cogito.HostedWebCore.ServiceFabric
         /// <returns></returns>
         public Task CloseAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (appHost != null)
+            {
+                appHost.Stop();
+                appHost = null;
+            }
+
+            return Task.FromResult(true);
         }
 
         /// <summary>
