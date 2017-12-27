@@ -25,10 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="FileAndServe.AspNetCore" Version="2.0.0" />
-        <PackageReference Include="FileAndServe.Components.ServiceFabric" Version="2.0.0" />
-        <PackageReference Include="FileAndServe.Components.ServiceFabric.AspNetCore" Version="2.0.0" />
-        <PackageReference Include="FileAndServe.ServiceFabric.AspNetCore" Version="2.0.0" />
         <PackageReference Include="Microsoft.AspNetCore" Version="2.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.HttpOverrides" Version="2.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.1" />
