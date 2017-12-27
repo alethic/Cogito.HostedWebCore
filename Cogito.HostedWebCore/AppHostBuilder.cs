@@ -1,12 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Linq;
+
 using Cogito.IIS.Configuration;
 
 namespace Cogito.HostedWebCore
 {
 
-    public class WebHostBuilder
+    public class AppHostBuilder
     {
 
         AppHostConfigurator configurator;
@@ -17,7 +18,7 @@ namespace Cogito.HostedWebCore
         /// <param name="applicationHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public WebHostBuilder Configure(XElement applicationHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder Configure(XElement applicationHostConfig, Action<AppHostConfigurator> configure)
         {
             configure?.Invoke(configurator = new AppHostConfigurator(applicationHostConfig));
             return this;
@@ -29,7 +30,7 @@ namespace Cogito.HostedWebCore
         /// <param name="applicationHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public WebHostBuilder Configure(XDocument applicationHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder Configure(XDocument applicationHostConfig, Action<AppHostConfigurator> configure)
         {
             return Configure(applicationHostConfig?.Root, configure);
         }
@@ -40,7 +41,7 @@ namespace Cogito.HostedWebCore
         /// <param name="applicationHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public WebHostBuilder Configure(string applicationHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder Configure(string applicationHostConfig, Action<AppHostConfigurator> configure)
         {
             return Configure(XDocument.Load(applicationHostConfig), configure);
         }
@@ -51,7 +52,7 @@ namespace Cogito.HostedWebCore
         /// <param name="applicationHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public WebHostBuilder Configure(Stream applicationHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder Configure(Stream applicationHostConfig, Action<AppHostConfigurator> configure)
         {
             return Configure(XDocument.Load(applicationHostConfig), configure);
         }
@@ -61,10 +62,10 @@ namespace Cogito.HostedWebCore
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public WebHostBuilder Configure(Action<AppHostConfigurator> configure)
+        public AppHostBuilder Configure(Action<AppHostConfigurator> configure)
         {
             return Configure(
-                typeof(WebHostBuilder).Assembly.GetManifestResourceStream("Cogito.HostedWebCore.Configuration.applicationHost.config"),
+                typeof(AppHostBuilder).Assembly.GetManifestResourceStream("Cogito.HostedWebCore.Configuration.applicationHost.config"),
                 configure);
         }
 
@@ -72,12 +73,12 @@ namespace Cogito.HostedWebCore
         /// Builds the web host.
         /// </summary>
         /// <returns></returns>
-        public WebHost Build()
+        public AppHost Build()
         {
             if (configurator == null)
-                throw new WebHostException("WebHost has not been configured.");
+                throw new AppHostException("WebHost has not been configured.");
 
-            return new WebHost(new XDocument(configurator.Element));
+            return new AppHost(new XDocument(configurator.Element));
         }
 
     }

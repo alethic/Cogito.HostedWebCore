@@ -3,24 +3,26 @@
 namespace Cogito.HostedWebCore
 {
 
-    public class WebHostException : 
+    public class AppHostException : 
         Exception
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public WebHostException()
+        public AppHostException()
         {
+
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="message"></param>
-        public WebHostException(string message) :
+        public AppHostException(string message) :
             base(message)
         {
+
         }
 
         /// <summary>
@@ -28,9 +30,10 @@ namespace Cogito.HostedWebCore
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public WebHostException(string message, Exception innerException) :
+        public AppHostException(string message, Exception innerException) :
             base(message, innerException)
         {
+
         }
 
     }

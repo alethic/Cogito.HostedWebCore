@@ -40,9 +40,6 @@ namespace Cogito.IIS.Configuration
             if (Path.IsPathRooted(physicalPath) == false)
                 physicalPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), physicalPath);
 
-            if (Directory.Exists(physicalPath) == false)
-                throw new DirectoryNotFoundException();
-
             element.SetAttributeValue("physicalPath", physicalPath);
             return this;
         }

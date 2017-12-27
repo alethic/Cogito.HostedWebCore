@@ -8,7 +8,7 @@ namespace Cogito.HostedWebCore.Tests
 
         public static void Main()
         {
-            new WebHostBuilder()
+            new AppHostBuilder()
                 .Configure(c => c
                     .Site(1, s => s
                         .RemoveBindings()

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net47</TargetFramework>
+    <PackageId>Cogito.HostedWebCore.ServiceFabric</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Jerome Haltom</Authors>
+    <Company />
+    <Description>Service Fabric support for IIS Hosted Web Core.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ServiceFabric.Services" Version="2.8.232" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cogito.HostedWebCore\Cogito.HostedWebCore.csproj" />
+  </ItemGroup>
+
+</Project>

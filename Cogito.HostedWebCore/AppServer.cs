@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -12,7 +11,7 @@ namespace Cogito.HostedWebCore
     /// <summary>
     /// Provides operations to configure, start and stop the hosted IIS web server.
     /// </summary>
-    public static class WebServer
+    public static class AppServer
     {
 
         static readonly string HWEBCORE = Environment.ExpandEnvironmentVariables(@"%WINDIR%\system32\inetsrv\hwebcore.dll");
@@ -21,7 +20,7 @@ namespace Cogito.HostedWebCore
         /// <summary>
         /// Initializes the static instance.
         /// </summary>
-        static WebServer()
+        static AppServer()
         {
             ApplicationHostConfigPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".config");
             RootWebConfigPath = Environment.ExpandEnvironmentVariables(SYSTEM_WEB_CONFIG);
