@@ -18,11 +18,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Configuration\applicationHost.config" />
+    <None Remove="Configuration\ApplicationHost.config" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\applicationHost.config" />
+    <EmbeddedResource Include="Configuration\ApplicationHost.config" />
   </ItemGroup>
 
   <ItemGroup>

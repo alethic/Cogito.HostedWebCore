@@ -22,7 +22,6 @@ namespace Cogito.HostedWebCore
         /// </summary>
         static AppServer()
         {
-            ApplicationHostConfigPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".config");
             RootWebConfigPath = Environment.ExpandEnvironmentVariables(SYSTEM_WEB_CONFIG);
             InstanceName = Guid.NewGuid().ToString();
         }
@@ -64,8 +63,6 @@ namespace Cogito.HostedWebCore
 
             if (File.Exists(HWEBCORE) == false)
                 throw new FileNotFoundException("Unable to find IIS Hostable Web Core entry point. Ensure IIS Hostable Web Core is installed.");
-            if (File.Exists(SYSTEM_WEB_CONFIG) == false)
-                throw new FileNotFoundException("Unable to find default system Web.config file.");
             if (File.Exists(ApplicationHostConfigPath) == false)
                 throw new FileNotFoundException("Cannot find ApplicationHostConfigPath file.");
             if (File.Exists(RootWebConfigPath) == false)

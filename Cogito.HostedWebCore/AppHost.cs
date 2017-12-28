@@ -17,17 +17,23 @@ namespace Cogito.HostedWebCore
     {
 
         readonly static object sync = new object();
-        readonly XDocument configuration;
+        readonly XDocument rootWebConfig;
+        readonly XDocument appHostConfig;
         readonly ILogger logger;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="configuration"></param>
+        /// <param name="rootWebConfig"></param>
+        /// <param name="appHostConfig"></param>
         /// <param name="logger"></param>
-        internal AppHost(XDocument configuration, ILogger logger = null)
+        internal AppHost(
+            XDocument rootWebConfig,
+            XDocument appHostConfig,
+            ILogger logger = null)
         {
-            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            this.rootWebConfig = rootWebConfig;
+            this.appHostConfig = appHostConfig;
             this.logger = logger;
         }
 
@@ -38,11 +44,12 @@ namespace Cogito.HostedWebCore
         {
             lock (sync)
             {
-                // save settings to default configuration location
                 try
                 {
-                    logger?.LogInformation("Saving temporary application host configuration to {0}", AppServer.ApplicationHostConfigPath);
-                    configuration.Save(AppServer.ApplicationHostConfigPath);
+                    if (rootWebConfig != null)
+                        rootWebConfig.Save(AppServer.RootWebConfigPath = Path.Combine(Path.GetTempFileName() + ".Web.config"));
+                    if (appHostConfig != null)
+                        appHostConfig.Save(AppServer.ApplicationHostConfigPath = Path.Combine(Path.GetTempFileName() + ".ApplicationHost.config"));
                 }
                 catch (IOException e)
                 {

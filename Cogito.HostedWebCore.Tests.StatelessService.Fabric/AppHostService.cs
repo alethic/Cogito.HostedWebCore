@@ -31,7 +31,7 @@ namespace Cogito.HostedWebCore.Tests.StatelessService.Fabric
             yield return new ServiceInstanceListener(context =>
                 new AppHostCommunicationListener(context, "ServiceEndpoint", (protocol, bindingInformation, path, listener) =>
                     new AppHostBuilder()
-                        .Configure(c => c
+                        .ConfigureApp(c => c
                             .Site(1, s => s
                                 .RemoveBindings()
                                 .AddBinding(protocol, bindingInformation)

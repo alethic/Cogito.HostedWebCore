@@ -4,68 +4,140 @@ using System.Xml.Linq;
 
 using Cogito.IIS.Configuration;
 
+using Microsoft.Extensions.Logging;
+
 namespace Cogito.HostedWebCore
 {
 
     public class AppHostBuilder
     {
 
-        AppHostConfigurator configurator;
+        WebConfigurator web;
+        AppHostConfigurator app;
+        ILogger logger;
 
         /// <summary>
-        /// Configures the web host, starting with the specified configuration file.
+        /// Configures the specified logger.
         /// </summary>
-        /// <param name="applicationHostConfig"></param>
-        /// <param name="configure"></param>
+        /// <param name="logger"></param>
         /// <returns></returns>
-        public AppHostBuilder Configure(XElement applicationHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder UseLogger(ILogger logger)
         {
-            configure?.Invoke(configurator = new AppHostConfigurator(applicationHostConfig));
+            this.logger = logger;
             return this;
         }
 
         /// <summary>
-        /// Configures the web host, starting with the specified configuration file.
+        /// Configures the root web config.
         /// </summary>
-        /// <param name="applicationHostConfig"></param>
+        /// <param name="appHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder Configure(XDocument applicationHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(XElement webConfig, Action<WebConfigurator> configure)
         {
-            return Configure(applicationHostConfig?.Root, configure);
+            configure?.Invoke(web = new WebConfigurator(webConfig));
+            return this;
         }
 
         /// <summary>
-        /// Configures the web host, starting with the specified configuration file.
+        /// Configures the root web config.
         /// </summary>
-        /// <param name="applicationHostConfig"></param>
+        /// <param name="appHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder Configure(string applicationHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(XDocument webConfig, Action<WebConfigurator> configure)
         {
-            return Configure(XDocument.Load(applicationHostConfig), configure);
+            return ConfigureWeb(webConfig?.Root, configure);
         }
 
         /// <summary>
-        /// Configures the web host, starting with the specified configuration file read from the stream.
+        /// Configures the root web config.
         /// </summary>
-        /// <param name="applicationHostConfig"></param>
+        /// <param name="appHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder Configure(Stream applicationHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(string webConfig, Action<WebConfigurator> configure)
         {
-            return Configure(XDocument.Load(applicationHostConfig), configure);
+            return ConfigureWeb(XDocument.Load(webConfig), configure);
         }
 
         /// <summary>
-        /// Configures the web host with the default configuration file.
+        /// Configures the root web config.
+        /// </summary>
+        /// <param name="appHostConfig"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public AppHostBuilder ConfigureWeb(Stream webConfig, Action<WebConfigurator> configure)
+        {
+            return ConfigureWeb(XDocument.Load(webConfig), configure);
+        }
+
+        /// <summary>
+        /// Configures the root web config.
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder Configure(Action<AppHostConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(Action<WebConfigurator> configure)
         {
-            return Configure(
-                typeof(AppHostBuilder).Assembly.GetManifestResourceStream("Cogito.HostedWebCore.Configuration.applicationHost.config"),
+            return ConfigureWeb(
+                typeof(AppHostBuilder).Assembly.GetManifestResourceStream("Cogito.HostedWebCore.Configuration.Web.config"),
+                configure);
+        }
+
+        /// <summary>
+        /// Configures the application host config.
+        /// </summary>
+        /// <param name="appHostConfig"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public AppHostBuilder ConfigureApp(XElement appHostConfig, Action<AppHostConfigurator> configure)
+        {
+            configure?.Invoke(app = new AppHostConfigurator(appHostConfig));
+            return this;
+        }
+
+        /// <summary>
+        /// Configures the application host config.
+        /// </summary>
+        /// <param name="appHostConfig"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public AppHostBuilder ConfigureApp(XDocument appHostConfig, Action<AppHostConfigurator> configure)
+        {
+            return ConfigureApp(appHostConfig?.Root, configure);
+        }
+
+        /// <summary>
+        /// Configures the application host config.
+        /// </summary>
+        /// <param name="appHostConfig"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public AppHostBuilder ConfigureApp(string appHostConfig, Action<AppHostConfigurator> configure)
+        {
+            return ConfigureApp(XDocument.Load(appHostConfig), configure);
+        }
+
+        /// <summary>
+        /// Configures the application host config.
+        /// </summary>
+        /// <param name="appHostConfig"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public AppHostBuilder ConfigureApp(Stream appHostConfig, Action<AppHostConfigurator> configure)
+        {
+            return ConfigureApp(XDocument.Load(appHostConfig), configure);
+        }
+
+        /// <summary>
+        /// Configures the application host config.
+        /// </summary>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public AppHostBuilder ConfigureApp(Action<AppHostConfigurator> configure)
+        {
+            return ConfigureApp(
+                typeof(AppHostBuilder).Assembly.GetManifestResourceStream("Cogito.HostedWebCore.Configuration.ApplicationHost.config"),
                 configure);
         }
 
@@ -75,10 +147,10 @@ namespace Cogito.HostedWebCore
         /// <returns></returns>
         public AppHost Build()
         {
-            if (configurator == null)
-                throw new AppHostException("WebHost has not been configured.");
-
-            return new AppHost(new XDocument(configurator.Element));
+            return new AppHost(
+                web != null ? new XDocument(web.Element) : null,
+                app != null ? new XDocument(app.Element) : null,
+                logger);
         }
 
     }

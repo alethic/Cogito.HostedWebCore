@@ -17,6 +17,15 @@ namespace Cogito.IIS.Configuration
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        public AppHostConfigurator(XDocument element)
+        {
+            this.element = element?.Root ?? throw new ArgumentNullException(nameof(element));
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
         public AppHostConfigurator(XElement element)
         {
             this.element = element ?? throw new ArgumentNullException(nameof(element));

@@ -9,7 +9,7 @@ namespace Cogito.HostedWebCore.Tests
         public static void Main()
         {
             new AppHostBuilder()
-                .Configure(c => c
+                .ConfigureApp(c => c
                     .Site(1, s => s
                         .RemoveBindings()
                         .AddHttpBinding("localhost", 12311)
