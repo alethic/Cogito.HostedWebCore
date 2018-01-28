@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Jerome Haltom</Authors>
+    <Company>Jerome Haltom</Company>
+    <Description>Provides utilities to configure Web.config files.</Description>
+  </PropertyGroup>
+
+</Project>

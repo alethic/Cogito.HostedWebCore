@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Cogito.IIS.Configuration
+namespace Cogito.Web.Configuration
 {
 
     /// <summary>

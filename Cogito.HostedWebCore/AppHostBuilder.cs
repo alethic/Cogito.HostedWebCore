@@ -2,9 +2,10 @@
 using System.IO;
 using System.Xml.Linq;
 
-using Cogito.IIS.Configuration;
-
 using Microsoft.Extensions.Logging;
+
+using Cogito.IIS.Configuration;
+using Cogito.Web.Configuration;
 
 namespace Cogito.HostedWebCore
 {

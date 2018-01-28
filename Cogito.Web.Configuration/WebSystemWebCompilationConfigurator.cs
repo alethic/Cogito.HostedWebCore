@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Linq;
 using System.Xml.Linq;
 
-namespace Cogito.IIS.Configuration
+namespace Cogito.Web.Configuration
 {
 
     /// <summary>
     /// Provides configuration methods for 'system.web'.
     /// </summary>
-    public class WebSystemWebConfigurator
+    public class WebSystemWebCompilationConfigurator
     {
 
         readonly XElement element;
@@ -17,7 +16,7 @@ namespace Cogito.IIS.Configuration
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public WebSystemWebConfigurator(XElement element)
+        public WebSystemWebCompilationConfigurator(XElement element)
         {
             this.element = element ?? throw new ArgumentNullException(nameof(element));
         }
@@ -29,19 +28,17 @@ namespace Cogito.IIS.Configuration
         public XElement Element => element;
 
         /// <summary>
-        /// Configures the 'compilation' element.
+        /// Sets the 'tempDirectory' attribute.
         /// </summary>
-        /// <param name="configurator"></param>
+        /// <param name="path"></param>
         /// <returns></returns>
-        public WebSystemWebConfigurator Compilation(Action<WebSystemWebCompilationConfigurator> configure)
+        public WebSystemWebCompilationConfigurator SetTempDirectory(string path)
         {
-            var e = element
-                .Elements("compilation")
-                .FirstOrDefault();
-            if (e == null)
-                element.Add(e = new XElement("compilation"));
+            if (path == null)
+                element.Attribute("tempDirectory")?.Remove();
+            else
+                element.SetAttributeValue("tempDirectory", path);
 
-            configure?.Invoke(new WebSystemWebCompilationConfigurator(e));
             return this;
         }
 

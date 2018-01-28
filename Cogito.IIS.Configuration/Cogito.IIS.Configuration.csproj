@@ -5,6 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Jerome Haltom</Authors>
     <Company />
+    <Description>Provides utilities to configure ApplicationHost.config files and other IIS artifacts.</Description>
   </PropertyGroup>
 
   <ItemGroup>

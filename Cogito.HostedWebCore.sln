@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27110.0
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cogito.HostedWebCore", "Cogito.HostedWebCore\Cogito.HostedWebCore.csproj", "{B125E1FE-FF08-4DF9-9416-7C571492D961}"
 EndProject
@@ -9,11 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cogito.HostedWebCore.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cogito.IIS.Configuration", "Cogito.IIS.Configuration\Cogito.IIS.Configuration.csproj", "{7067187B-B930-4E71-BD61-548F340CE718}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cogito.HostedWebCore.ServiceFabric", "Cogito.HostedWebCore.ServiceFabric\Cogito.HostedWebCore.ServiceFabric.csproj", "{36EDE6A0-BDEB-40BD-BF84-046B08C88C4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cogito.HostedWebCore.ServiceFabric", "Cogito.HostedWebCore.ServiceFabric\Cogito.HostedWebCore.ServiceFabric.csproj", "{36EDE6A0-BDEB-40BD-BF84-046B08C88C4C}"
 EndProject
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Cogito.HostedWebCore.Tests.Fabric", "Cogito.HostedWebCore.Tests.Fabric\Cogito.HostedWebCore.Tests.Fabric.sfproj", "{1562B72C-4F6E-4439-9640-53EFCD3866C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cogito.HostedWebCore.Tests.StatelessService.Fabric", "Cogito.HostedWebCore.Tests.StatelessService.Fabric\Cogito.HostedWebCore.Tests.StatelessService.Fabric.csproj", "{51779C33-1392-4B0F-AAC9-E953BFC29E22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cogito.HostedWebCore.Tests.StatelessService.Fabric", "Cogito.HostedWebCore.Tests.StatelessService.Fabric\Cogito.HostedWebCore.Tests.StatelessService.Fabric.csproj", "{51779C33-1392-4B0F-AAC9-E953BFC29E22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cogito.Web.Configuration", "Cogito.Web.Configuration\Cogito.Web.Configuration.csproj", "{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +74,14 @@ Global
 		{51779C33-1392-4B0F-AAC9-E953BFC29E22}.Release|Any CPU.ActiveCfg = Release|x64
 		{51779C33-1392-4B0F-AAC9-E953BFC29E22}.Release|x64.ActiveCfg = Release|x64
 		{51779C33-1392-4B0F-AAC9-E953BFC29E22}.Release|x64.Build.0 = Release|x64
+		{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}.Debug|x64.Build.0 = Debug|Any CPU
+		{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}.Release|x64.ActiveCfg = Release|Any CPU
+		{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
