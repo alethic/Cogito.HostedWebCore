@@ -77,7 +77,7 @@ namespace Cogito.HostedWebCore.ServiceFabric
                 appHost = null;
             }
 
-            return Task.FromResult(true);
+            return Task.CompletedTask;
         }
 
         /// <summary>
