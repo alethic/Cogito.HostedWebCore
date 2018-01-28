@@ -37,20 +37,6 @@ namespace Cogito.IIS.Configuration
         public XElement Element => element;
 
         /// <summary>
-        /// Sets the binding information on the site.
-        /// </summary>
-        /// <param name="host"></param>
-        /// <param name="port"></param>
-        /// <returns></returns>
-        public AppHostConfigurator SetBindingInformation(string host = null, int port = 80)
-        {
-            if (port < 1 || port > 65535)
-                throw new ArgumentOutOfRangeException(nameof(port));
-
-            return SetBindingInformation($"*:{port}:{host}");
-        }
-
-        /// <summary>
         /// Configures a site.
         /// </summary>
         /// <param name="path"></param>
