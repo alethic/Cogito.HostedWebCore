@@ -35,7 +35,7 @@ namespace Cogito.IIS.Configuration
         public WebSystemWebCompilationConfigurator SetTempDirectory(string path)
         {
             if (path == null)
-                element.Attribute("compilation")?.Remove();
+                element.Attribute("tempDirectory")?.Remove();
             else
                 element.SetAttributeValue("tempDirectory", path);
 
