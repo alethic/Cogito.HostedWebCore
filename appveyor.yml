@@ -19,6 +19,8 @@ build:
   project: Cogito.HostedWebCore.sln
 
 artifacts:
+  - path: Cogito.Web.Configuration\bin\**\*.nupkg
+    name: Cogito.Web.Configuration
   - path: Cogito.IIS.Configuration\bin\**\*.nupkg
     name: Cogito.IIS.Configuration
   - path: Cogito.HostedWebCore\bin\**\*.nupkg
