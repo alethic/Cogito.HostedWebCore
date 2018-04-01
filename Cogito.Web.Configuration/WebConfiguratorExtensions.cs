@@ -30,6 +30,17 @@ namespace Cogito.Web.Configuration
             return Section(self, "system.web", e => configure?.Invoke(new WebSystemWebConfigurator(e)));
         }
 
+        /// <summary>
+        /// Configures the 'system.webServer' section.
+        /// </summary>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public static TWeb SystemWebServer<TWeb>(this TWeb self, Action<WebSystemWebServerConfigurator> configure)
+            where TWeb : IWebConfigurator
+        {
+            return Section(self, "system.webServer", e => configure?.Invoke(new WebSystemWebServerConfigurator(e)));
+        }
+
     }
 
 }
