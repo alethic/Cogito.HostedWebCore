@@ -3,10 +3,12 @@ using System.IO;
 using System.Reflection;
 using System.Xml.Linq;
 
+using Cogito.Web.Configuration;
+
 namespace Cogito.IIS.Configuration
 {
 
-    public class AppHostVirtualDirectoryConfigurator
+    public class AppHostVirtualDirectoryConfigurator : IWebElementConfigurator
     {
 
         readonly XElement element;

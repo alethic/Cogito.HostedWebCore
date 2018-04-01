@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Xml.Linq;
 
+using Cogito.Web.Configuration;
+
 namespace Cogito.IIS.Configuration
 {
 
-    public class AppHostApplicationConfigurator
+    public class AppHostApplicationConfigurator : IWebElementConfigurator
     {
 
         readonly XElement element;
