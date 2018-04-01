@@ -54,13 +54,13 @@ namespace Cogito.Web.Configuration
 
         public WebSystemWebServerAspConfigurator Cache(Action<WebSystemWebServerAspCacheConfigurator> configure)
         {
-            configure?.Invoke(new WebSystemWebServerAspCacheConfigurator(Element));
+            this.Configure("cache", e => configure?.Invoke(new WebSystemWebServerAspCacheConfigurator(e)));
             return this;
         }
 
         public WebSystemWebServerAspConfigurator Session(Action<WebSystemWebServerAspSessionConfigurator> configure)
         {
-            configure?.Invoke(new WebSystemWebServerAspSessionConfigurator(Element));
+            this.Configure("session", e => configure?.Invoke(new WebSystemWebServerAspSessionConfigurator(e)));
             return this;
         }
 
