@@ -5,7 +5,7 @@ namespace Cogito.Web.Configuration
 {
 
     /// <summary>
-    /// Provides configuration methods for 'system.web'.
+    /// Provides configuration methods for 'system.webServer/asp'.
     /// </summary>
     public class WebSystemWebServerAspConfigurator : IWebElementConfigurator
     {

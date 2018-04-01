@@ -27,15 +27,25 @@ namespace Cogito.Web.Configuration
         /// <returns></returns>
         public XElement Element => element;
 
-
         /// <summary>
-        /// Configures the 'compilation' element.
+        /// Configures the 'asp' element.
         /// </summary>
         /// <param name="configurator"></param>
         /// <returns></returns>
-        public WebSystemWebServerConfigurator Compilation(Action<WebSystemWebServerAspConfigurator> configure)
+        public WebSystemWebServerConfigurator Asp(Action<WebSystemWebServerAspConfigurator> configure)
         {
             this.Configure("asp", e => configure?.Invoke(new WebSystemWebServerAspConfigurator(e)));
+            return this;
+        }
+
+        /// <summary>
+        /// Configures the 'httpCompression' element.
+        /// </summary>
+        /// <param name="configurator"></param>
+        /// <returns></returns>
+        public WebSystemWebServerConfigurator HttpCompression(Action<WebSystemWebServerHttpCompressionConfigurator> configure)
+        {
+            this.Configure("httpCompression", e => configure?.Invoke(new WebSystemWebServerHttpCompressionConfigurator(e)));
             return this;
         }
 
