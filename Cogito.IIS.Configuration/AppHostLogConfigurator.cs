@@ -34,7 +34,7 @@ namespace Cogito.IIS.Configuration
         /// </summary>
         /// <param name="configurator"></param>
         /// <returns></returns>
-        public AppHostLogConfigurator Site()
+        public AppHostLogConfigurator UseSite()
         {
             element.RemoveAll();
             element.SetAttributeValue("centralLogFileMode", "Site");
