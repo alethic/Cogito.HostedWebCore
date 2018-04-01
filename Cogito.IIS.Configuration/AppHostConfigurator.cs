@@ -37,6 +37,17 @@ namespace Cogito.IIS.Configuration
         public XElement Element => element;
 
         /// <summary>
+        /// Applies additional configure to the <see cref="AppHostConfigurator"/>.
+        /// </summary>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public AppHostConfigurator Configure(Action<AppHostConfigurator> configure = null)
+        {
+            configure?.Invoke(this);
+            return this;
+        }
+
+        /// <summary>
         /// Configures a site.
         /// </summary>
         /// <param name="path"></param>
