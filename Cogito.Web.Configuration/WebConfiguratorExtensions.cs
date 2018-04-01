@@ -16,7 +16,7 @@ namespace Cogito.Web.Configuration
         public static TWeb Section<TWeb>(this TWeb self, string sectionName, Action<XElement> configure)
             where TWeb : IWebConfigurator
         {
-            return self.Element(sectionName, configure);
+            return self.Configure(sectionName, configure);
         }
 
         /// <summary>

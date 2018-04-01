@@ -35,14 +35,7 @@ namespace Cogito.Web.Configuration
         /// <returns></returns>
         public WebSystemWebConfigurator Compilation(Action<WebSystemWebCompilationConfigurator> configure)
         {
-            var e = element
-                .Elements("compilation")
-                .FirstOrDefault();
-            if (e == null)
-                element.Add(e = new XElement("compilation"));
-
-            configure?.Invoke(new WebSystemWebCompilationConfigurator(e));
-            return this;
+            return this.Configure("compilation", e => configure?.Invoke(new WebSystemWebCompilationConfigurator(e)));
         }
 
     }

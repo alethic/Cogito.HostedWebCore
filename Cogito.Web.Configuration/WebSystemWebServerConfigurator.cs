@@ -5,9 +5,9 @@ namespace Cogito.Web.Configuration
 {
 
     /// <summary>
-    /// Provides configuration methods for 'system.web'.
+    /// Provides configuration methods for 'system.webServer'.
     /// </summary>
-    public class WebSystemWebCompilationConfigurator : IWebElementConfigurator
+    public class WebSystemWebServerConfigurator : IWebSectionConfigurator
     {
 
         readonly XElement element;
@@ -16,7 +16,7 @@ namespace Cogito.Web.Configuration
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public WebSystemWebCompilationConfigurator(XElement element)
+        public WebSystemWebServerConfigurator(XElement element)
         {
             this.element = element ?? throw new ArgumentNullException(nameof(element));
         }
@@ -27,18 +27,15 @@ namespace Cogito.Web.Configuration
         /// <returns></returns>
         public XElement Element => element;
 
-        /// <summary>
-        /// Sets the 'tempDirectory' attribute.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public WebSystemWebCompilationConfigurator TempDirectory(string path)
-        {
-            if (path == null)
-                element.Attribute("tempDirectory")?.Remove();
-            else
-                element.SetAttributeValue("tempDirectory", path);
 
+        /// <summary>
+        /// Configures the 'compilation' element.
+        /// </summary>
+        /// <param name="configurator"></param>
+        /// <returns></returns>
+        public WebSystemWebServerConfigurator Compilation(Action<WebSystemWebServerAspConfigurator> configure)
+        {
+            this.Configure("asp", e => configure?.Invoke(new WebSystemWebServerAspConfigurator(e)));
             return this;
         }
 

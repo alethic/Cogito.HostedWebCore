@@ -9,12 +9,26 @@ namespace Cogito.Web.Configuration
     {
 
         /// <summary>
-        /// Configures the given element.
+        /// Configures the current element.
+        /// </summary>
+        /// <typeparam name="TWeb"></typeparam>
+        /// <param name="self"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public static TWeb Configure<TWeb>(this TWeb self, Action<XElement> configure)
+            where TWeb : IWebElementConfigurator
+        {
+            configure?.Invoke(self.Element);
+            return self;
+        }
+
+        /// <summary>
+        /// Configures the given named element.
         /// </summary>
         /// <param name="elementName"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public static TWeb Element<TWeb>(this TWeb self, string elementName, Action<XElement> configure)
+        public static TWeb Configure<TWeb>(this TWeb self, string elementName, Action<XElement> configure)
             where TWeb : IWebElementConfigurator
         {
             if (string.IsNullOrWhiteSpace(elementName))
