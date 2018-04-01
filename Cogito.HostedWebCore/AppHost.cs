@@ -94,7 +94,7 @@ namespace Cogito.HostedWebCore
                     await Task.Delay(TimeSpan.FromSeconds(5));
 
                     if (AppServer.IsActivated == false)
-                        throw new AppHostException("Application host has unexpectidly stopped.");
+                        throw new AppHostException("Application host has unexpectedly stopped.");
                 }
             }
             catch (OperationCanceledException)

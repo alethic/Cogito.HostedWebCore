@@ -3,7 +3,7 @@
 namespace Cogito.HostedWebCore
 {
 
-    public class AppHostException : 
+    public class AppHostException :
         Exception
     {
 

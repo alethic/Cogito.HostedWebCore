@@ -63,6 +63,11 @@ namespace Cogito.IIS.Configuration
             return this;
         }
 
+        public AppHostConfigurator Log(Action<AppHostLogConfigurator> configure = null)
+        {
+            return this.Configure("log", e => configure?.Invoke(new AppHostLogConfigurator(e)));
+        }
+
     }
 
 }
