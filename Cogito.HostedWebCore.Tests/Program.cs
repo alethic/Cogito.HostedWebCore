@@ -16,6 +16,7 @@ namespace Cogito.HostedWebCore.Tests
                         .Application("/", a => a
                             .VirtualDirectory("/", v => v.UsePhysicalPath("wwwroot")))
                         .UseFailedRequestLogging(@"%TEMP%\log.txt")))
+                .RequireModule("ApplicationInitializationModule")
                 .Build()
                 .Run();
         }
