@@ -7,7 +7,7 @@ using Cogito.Web.Configuration;
 namespace Cogito.IIS.Configuration
 {
 
-    public class AppHostGlobalModuleConfigurator : IWebElementConfigurator
+    public class WebSystemWebServerGlobalModuleConfigurator : IWebElementConfigurator
     {
 
         readonly XElement element;
@@ -16,7 +16,7 @@ namespace Cogito.IIS.Configuration
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public AppHostGlobalModuleConfigurator(XElement element)
+        public WebSystemWebServerGlobalModuleConfigurator(XElement element)
         {
             this.element = element ?? throw new ArgumentNullException(nameof(element));
         }
@@ -27,19 +27,19 @@ namespace Cogito.IIS.Configuration
         /// <returns></returns>
         public XElement Element => element;
 
-        public AppHostGlobalModuleConfigurator Clear()
+        public WebSystemWebServerGlobalModuleConfigurator Clear()
         {
             Element.RemoveNodes();
             return this;
         }
 
-        public AppHostGlobalModuleConfigurator Remove(string moduleName)
+        public WebSystemWebServerGlobalModuleConfigurator Remove(string moduleName)
         {
             Element.Elements().Where(i => (string)i.Attribute("name") == moduleName).Remove();
             return this;
         }
 
-        public AppHostGlobalModuleConfigurator Add(string moduleName, string image)
+        public WebSystemWebServerGlobalModuleConfigurator Add(string moduleName, string image)
         {
             Element.Add(
                 new XElement("add",
