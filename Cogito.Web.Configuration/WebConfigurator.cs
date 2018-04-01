@@ -6,9 +6,9 @@ namespace Cogito.Web.Configuration
 {
 
     /// <summary>
-    /// Provides methods to configure the web site.
+    /// Provides methods that support the configuration of a Web.config file layout.
     /// </summary>
-    public class WebConfigurator
+    public class WebConfigurator : IWebConfigurator
     {
 
         readonly XElement element;
@@ -81,44 +81,6 @@ namespace Cogito.Web.Configuration
         public WebConfigurator Location(Action<WebConfigurator> configure)
         {
             return Location(null, null, configure);
-        }
-
-        /// <summary>
-        /// Configures the given section element.
-        /// </summary>
-        /// <param name="sectionName"></param>
-        /// <param name="configure"></param>
-        /// <returns></returns>
-        public WebConfigurator Section(string sectionName, Action<XElement> configure)
-        {
-            if (string.IsNullOrWhiteSpace(sectionName))
-                throw new ArgumentException(nameof(sectionName));
-
-            var e = element
-                .Elements(sectionName)
-                .FirstOrDefault();
-            if (e == null)
-                element.Add(e = new XElement("sectionName"));
-
-            configure?.Invoke(e);
-            return this;
-        }
-
-        /// <summary>
-        /// Configures the 'system.web' section.
-        /// </summary>
-        /// <param name="configure"></param>
-        /// <returns></returns>
-        public WebConfigurator SystemWeb(Action<WebSystemWebConfigurator> configure)
-        {
-            var e = element
-                .Elements("system.web")
-                .FirstOrDefault();
-            if (e == null)
-                element.Add(e = new XElement("system.web"));
-
-            configure?.Invoke(new WebSystemWebConfigurator(e));
-            return this;
         }
 
     }

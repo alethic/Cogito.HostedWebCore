@@ -2,13 +2,15 @@
 using System.Linq;
 using System.Xml.Linq;
 
+using Cogito.Web.Configuration;
+
 namespace Cogito.IIS.Configuration
 {
 
     /// <summary>
     /// Provides methods to configure the application host.
     /// </summary>
-    public class AppHostConfigurator
+    public class AppHostConfigurator : IWebConfigurator
     {
 
         readonly XElement element;
@@ -35,17 +37,6 @@ namespace Cogito.IIS.Configuration
         /// Gets the root configuration element.
         /// </summary>
         public XElement Element => element;
-
-        /// <summary>
-        /// Applies additional configure to the <see cref="AppHostConfigurator"/>.
-        /// </summary>
-        /// <param name="configure"></param>
-        /// <returns></returns>
-        public AppHostConfigurator Configure(Action<AppHostConfigurator> configure = null)
-        {
-            configure?.Invoke(this);
-            return this;
-        }
 
         /// <summary>
         /// Configures a site.

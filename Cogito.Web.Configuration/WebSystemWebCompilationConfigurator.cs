@@ -7,7 +7,7 @@ namespace Cogito.Web.Configuration
     /// <summary>
     /// Provides configuration methods for 'system.web'.
     /// </summary>
-    public class WebSystemWebCompilationConfigurator
+    public class WebSystemWebCompilationConfigurator : IWebSectionConfigurator
     {
 
         readonly XElement element;
