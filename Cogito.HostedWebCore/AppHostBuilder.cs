@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
 
@@ -16,7 +14,6 @@ namespace Cogito.HostedWebCore
     public class AppHostBuilder
     {
 
-        readonly HashSet<string> requireModules = new HashSet<string>();
         WebConfigurator web;
         AppHostConfigurator app;
         ILogger logger;
@@ -145,37 +142,6 @@ namespace Cogito.HostedWebCore
         }
 
         /// <summary>
-        /// Indicates that the app host will require the given module, and to validate its existance during build.
-        /// </summary>
-        /// <param name="moduleName"></param>
-        /// <returns></returns>
-        public AppHostBuilder RequireModule(string moduleName)
-        {
-            requireModules.Add(moduleName);
-            return this;
-        }
-
-        /// <summary>
-        /// Validates the contents of the Web.config file.
-        /// </summary>
-        /// <param name="webXml"></param>
-        void ValidateWeb(XDocument webXml)
-        {
-
-        }
-
-        /// <summary>
-        /// Validates the contents of the ApplicationHost.config file.
-        /// </summary>
-        /// <param name="appXml"></param>
-        void ValidateApp(XDocument appXml)
-        {
-            foreach (var i in requireModules)
-                if (appXml.Root.Elements("system.webServer").Elements("globalModules").Elements("add").Any(j => (string)j.Attribute("name") == i) == false)
-                    throw new AppHostConfigurationException($"Unable to find required global module {i}.");
-        }
-
-        /// <summary>
         /// Builds the web host.
         /// </summary>
         /// <returns></returns>
@@ -183,9 +149,6 @@ namespace Cogito.HostedWebCore
         {
             var webXml = web != null ? new XDocument(web.Element) : null;
             var appXml = app != null ? new XDocument(app.Element) : null;
-
-            ValidateWeb(webXml);
-            ValidateApp(appXml);
 
             return new AppHost(
                 webXml,
