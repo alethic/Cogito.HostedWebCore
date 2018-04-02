@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Xml.Linq;
 
 using Cogito.IIS.Configuration;
@@ -83,9 +84,8 @@ namespace Cogito.HostedWebCore
         /// <returns></returns>
         public AppHostBuilder ConfigureWeb(Action<WebConfigurator> configure)
         {
-            return ConfigureWeb(
-                typeof(AppHostBuilder).Assembly.GetManifestResourceStream("Cogito.HostedWebCore.Configuration.Web.config"),
-                configure);
+            using (var xml = File.OpenRead(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), @"config\web.config")))
+                return ConfigureWeb(xml, configure);
         }
 
         /// <summary>
