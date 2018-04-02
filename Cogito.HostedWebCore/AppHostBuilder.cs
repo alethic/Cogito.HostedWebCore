@@ -14,8 +14,11 @@ namespace Cogito.HostedWebCore
     public class AppHostBuilder
     {
 
-        WebConfigurator web;
-        AppHostConfigurator app;
+        readonly static string DEFAULT_WEB_CONFIG = Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), @"config\web.config");
+        readonly static string DEFAULT_APP_CONFIG = Environment.ExpandEnvironmentVariables(@"%windir%\System32\inetsrv\Config\applicationHost.config");
+
+        WebConfigurator rootWebConfigurator;
+        AppHostConfigurator appHostConfigurator;
         ILogger logger;
 
         /// <summary>
@@ -32,46 +35,57 @@ namespace Cogito.HostedWebCore
         /// <summary>
         /// Configures the root web config.
         /// </summary>
-        /// <param name="appHostConfig"></param>
+        /// <param name="rootWebConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureWeb(XElement webConfig, Action<WebConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(XElement rootWebConfig, Action<WebConfigurator> configure)
         {
-            configure?.Invoke(web = new WebConfigurator(webConfig));
+            if (rootWebConfig != null)
+                configure?.Invoke(rootWebConfigurator = new WebConfigurator(rootWebConfig));
+
             return this;
         }
 
         /// <summary>
         /// Configures the root web config.
         /// </summary>
-        /// <param name="appHostConfig"></param>
+        /// <param name="rootWebConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureWeb(XDocument webConfig, Action<WebConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(XDocument rootWebConfig, Action<WebConfigurator> configure)
         {
-            return ConfigureWeb(webConfig?.Root, configure);
+            if (rootWebConfig == null)
+                throw new ArgumentNullException(nameof(rootWebConfig));
+
+            return ConfigureWeb(rootWebConfig?.Root, configure);
         }
 
         /// <summary>
         /// Configures the root web config.
         /// </summary>
-        /// <param name="appHostConfig"></param>
+        /// <param name="rootWebConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureWeb(string webConfig, Action<WebConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(string rootWebConfig, Action<WebConfigurator> configure)
         {
-            return ConfigureWeb(XDocument.Load(webConfig), configure);
+            if (rootWebConfig == null)
+                throw new ArgumentNullException(nameof(rootWebConfig));
+
+            return ConfigureWeb(XDocument.Load(rootWebConfig), configure);
         }
 
         /// <summary>
         /// Configures the root web config.
         /// </summary>
-        /// <param name="appHostConfig"></param>
+        /// <param name="rootWebConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureWeb(Stream webConfig, Action<WebConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(Stream rootWebConfig, Action<WebConfigurator> configure)
         {
-            return ConfigureWeb(XDocument.Load(webConfig), configure);
+            if (rootWebConfig == null)
+                throw new ArgumentNullException(nameof(rootWebConfig));
+
+            return ConfigureWeb(XDocument.Load(rootWebConfig), configure);
         }
 
         /// <summary>
@@ -81,7 +95,7 @@ namespace Cogito.HostedWebCore
         /// <returns></returns>
         public AppHostBuilder ConfigureWeb(Action<WebConfigurator> configure)
         {
-            using (var xml = File.OpenRead(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), @"config\web.config")))
+            using (var xml = File.OpenRead(DEFAULT_WEB_CONFIG))
                 return ConfigureWeb(xml, configure);
         }
 
@@ -93,7 +107,10 @@ namespace Cogito.HostedWebCore
         /// <returns></returns>
         public AppHostBuilder ConfigureApp(XElement appHostConfig, Action<AppHostConfigurator> configure)
         {
-            configure?.Invoke(app = new AppHostConfigurator(appHostConfig));
+            if (appHostConfig == null)
+                throw new ArgumentNullException(nameof(appHostConfig));
+
+            configure?.Invoke(appHostConfigurator = new AppHostConfigurator(appHostConfig));
             return this;
         }
 
@@ -105,6 +122,9 @@ namespace Cogito.HostedWebCore
         /// <returns></returns>
         public AppHostBuilder ConfigureApp(XDocument appHostConfig, Action<AppHostConfigurator> configure)
         {
+            if (appHostConfig == null)
+                throw new ArgumentNullException(nameof(appHostConfig));
+
             return ConfigureApp(appHostConfig?.Root, configure);
         }
 
@@ -116,6 +136,9 @@ namespace Cogito.HostedWebCore
         /// <returns></returns>
         public AppHostBuilder ConfigureApp(string appHostConfig, Action<AppHostConfigurator> configure)
         {
+            if (appHostConfig == null)
+                throw new ArgumentNullException(nameof(appHostConfig));
+
             return ConfigureApp(XDocument.Load(appHostConfig), configure);
         }
 
@@ -127,6 +150,9 @@ namespace Cogito.HostedWebCore
         /// <returns></returns>
         public AppHostBuilder ConfigureApp(Stream appHostConfig, Action<AppHostConfigurator> configure)
         {
+            if (appHostConfig == null)
+                throw new ArgumentNullException(nameof(appHostConfig));
+
             return ConfigureApp(XDocument.Load(appHostConfig), configure);
         }
 
@@ -137,7 +163,7 @@ namespace Cogito.HostedWebCore
         /// <returns></returns>
         public AppHostBuilder ConfigureApp(Action<AppHostConfigurator> configure)
         {
-            using (var xml = File.OpenRead(Environment.ExpandEnvironmentVariables(@"%windir%\System32\inetsrv\Config\applicationHost.config")))
+            using (var xml = File.OpenRead(DEFAULT_APP_CONFIG))
                 return ConfigureApp(xml, configure);
         }
 
@@ -147,12 +173,12 @@ namespace Cogito.HostedWebCore
         /// <returns></returns>
         public AppHost Build()
         {
-            var webXml = web != null ? new XDocument(web.Element) : null;
-            var appXml = app != null ? new XDocument(app.Element) : null;
+            var rootWebXml = rootWebConfigurator != null ? new XDocument(rootWebConfigurator.Element) : null;
+            var appHostXml = appHostConfigurator != null ? new XDocument(appHostConfigurator.Element) : null;
 
             return new AppHost(
-                webXml,
-                appXml,
+                rootWebXml,
+                appHostXml,
                 logger);
         }
 
