@@ -55,7 +55,7 @@ namespace Cogito.IIS.Configuration
                 .Elements("site")
                 .FirstOrDefault(i => (int)i.Attribute("id") == id);
             if (e == null)
-                element.Add(e =
+                element.Element("system.applicationHost").Element("sites").Add(e =
                     new XElement("site",
                         new XAttribute("id", id)));
 

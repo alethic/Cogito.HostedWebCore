@@ -46,10 +46,12 @@ namespace Cogito.HostedWebCore
             {
                 try
                 {
+                    var g = Guid.NewGuid().ToString("N");
+
                     if (rootWebConfig != null)
-                        rootWebConfig.Save(AppServer.RootWebConfigPath = Path.Combine(Path.GetTempFileName() + ".Web.config"));
+                        rootWebConfig.Save(AppServer.RootWebConfigPath = Path.Combine(Path.GetTempPath(), $"{g}.Web.config"));
                     if (appHostConfig != null)
-                        appHostConfig.Save(AppServer.ApplicationHostConfigPath = Path.Combine(Path.GetTempFileName() + ".ApplicationHost.config"));
+                        appHostConfig.Save(AppServer.ApplicationHostConfigPath = Path.Combine(Path.GetTempPath(), $"{g}.ApplicationHost.config"));
                 }
                 catch (IOException e)
                 {

@@ -12,8 +12,8 @@ namespace Cogito.HostedWebCore.Tests.StatelessService.Fabric
     /// <summary>
     /// An instance of this class is created for each service instance by the Service Fabric runtime.
     /// </summary>
-    internal sealed class AppHostService :
-        Microsoft.ServiceFabric.Services.Runtime.StatelessService
+    public sealed class AppHostService :
+        StatelessAppHostService
     {
 
         /// <summary>
@@ -24,21 +24,6 @@ namespace Cogito.HostedWebCore.Tests.StatelessService.Fabric
             base(context)
         {
 
-        }
-
-        protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
-        {
-            yield return new ServiceInstanceListener(context =>
-                new AppHostCommunicationListener(context, "ServiceEndpoint", (protocol, bindingInformation, path, listener) =>
-                    new AppHostBuilder()
-                        .ConfigureApp(c => c
-                            .Site(1, s => s
-                                .RemoveBindings()
-                                .AddBinding(protocol, bindingInformation)
-                                .Application(path, a => a
-                                    .VirtualDirectory("/", v => v
-                                        .UsePhysicalPath(Path.Combine(Path.GetDirectoryName(typeof(AppHostService).Assembly.Location), "site"))))))
-                        .Build()));
         }
 
     }
