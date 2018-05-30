@@ -114,7 +114,7 @@ namespace Cogito.HostedWebCore
         {
             foreach (var kvp in namesAndPaths)
                 if (File.Exists(Environment.ExpandEnvironmentVariables(kvp.Path)) == false)
-                    throw new FileNotFoundException($"Validating {category}. Missing file for {kvp.Name}.", kvp.Path);
+                    throw new FileNotFoundException($"Validating {category}. Missing file for {kvp.Name}. Ensure required IIS features are installed.", kvp.Path);
         }
 
         /// <summary>
