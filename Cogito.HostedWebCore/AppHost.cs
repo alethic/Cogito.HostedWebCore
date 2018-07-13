@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -59,9 +61,67 @@ namespace Cogito.HostedWebCore
                 if (AppServer.IsActivated)
                     throw new AppHostException("AppHost is already activated within this process.");
 
-                logger?.LogInformation("Starting AppHost...");
+                LogStart();
                 AppServer.Start();
             }
+        }
+
+        /// <summary>
+        /// Prints out a summary of the application.
+        /// </summary>
+        void LogStart()
+        {
+            if (logger != null)
+                foreach (var site in appHostConfig.Root
+                        .Elements("system.applicationHost")
+                        .Elements("sites")
+                        .Elements("site"))
+                    LogStartSite(site);
+        }
+
+        /// <summary>
+        /// Logs information related to a specific site.
+        /// </summary>
+        /// <param name="xml"></param>
+        void LogStartSite(XElement xml)
+        {
+            var site = new
+            {
+                Id = (int)xml.Attribute("id"),
+                Name = (string)xml.Attribute("name"),
+                Applications = xml.Elements("application").Select(application => new
+                {
+                    Path = (string)application.Attribute("path"),
+                    VirtualDirectories = application.Elements("virtualDirectory").Select(virtualDirectory => new
+                    {
+                        Path = (string)virtualDirectory.Attribute("path"),
+                        PhysicalPath = (string)virtualDirectory.Attribute("physicalPath"),
+                    }).ToArray(),
+                }).ToArray(),
+                Bindings = xml.Elements("bindings").Elements("binding").Select(binding => new
+                {
+                    Protocol = binding.Attribute("protocol"),
+                    BindingInformation = binding.Attribute("bindingInformation")
+                }).ToArray(),
+            };
+
+            // build nice user log message
+            var m = new StringBuilder();
+            m.AppendLine($"Starting site {site.Name} ({site.Id}):");
+
+            foreach (var binding in site.Bindings)
+                m.AppendLine($"    Binding: {binding.Protocol} {binding.BindingInformation}");
+
+            foreach (var application in site.Applications)
+            {
+                m.AppendLine($"    Application: {application.Path}");
+
+                foreach (var virtualDirectory in application.VirtualDirectories)
+                    m.AppendLine($"        Virtual Directory: {virtualDirectory.Path} -> {virtualDirectory.PhysicalPath}");
+            }
+
+            // output log with object as data
+            logger.LogInformation(m.ToString());
         }
 
         /// <summary>

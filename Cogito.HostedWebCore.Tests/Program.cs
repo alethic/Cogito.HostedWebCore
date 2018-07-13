@@ -1,6 +1,7 @@
 ﻿using System.Xml.Linq;
 
 using Cogito.IIS.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Cogito.HostedWebCore.Tests
 {
@@ -10,7 +11,11 @@ namespace Cogito.HostedWebCore.Tests
 
         public static void Main()
         {
+            var f = new LoggerFactory()
+                .AddConsole();
+
             new AppHostBuilder()
+                .UseLogger(f.CreateLogger(""))
                 .ConfigureWeb(c => c.Location("Foo", l => l.Element.Add(new XElement("bar"))))
                 .ConfigureApp(c => c
                     .Site(1, s => s
