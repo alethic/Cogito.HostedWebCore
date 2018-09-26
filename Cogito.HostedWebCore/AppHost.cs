@@ -42,12 +42,12 @@ namespace Cogito.HostedWebCore
         /// <summary>
         /// Desired path of the temporary Web.config file.
         /// </summary>
-        public string RootWebConfigPath { get; set; } = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("n") + ".Web.config");
+        public string TemporaryRootWebConfigPath { get; set; } = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("n") + ".Web.config");
 
         /// <summary>
         /// Desired path of the temporary ApplicationHost.config file.
         /// </summary>
-        public string ApplicationHostConfigPath { get; set; } = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("n") + ".ApplicationHost.config");
+        public string TemporaryApplicationHostConfigPath { get; set; } = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("n") + ".ApplicationHost.config");
 
         /// <summary>
         /// Starts the web host.
@@ -60,16 +60,16 @@ namespace Cogito.HostedWebCore
                 {
                     if (rootWebConfig != null)
                     {
-                        if (RootWebConfigPath != null)
-                            AppServer.RootWebConfigPath = RootWebConfigPath;
+                        if (TemporaryRootWebConfigPath != null)
+                            AppServer.RootWebConfigPath = TemporaryRootWebConfigPath;
 
                         rootWebConfig.Save(AppServer.RootWebConfigPath);
                     }
 
                     if (appHostConfig != null)
                     {
-                        if (ApplicationHostConfigPath != null)
-                            AppServer.ApplicationHostConfigPath = ApplicationHostConfigPath;
+                        if (TemporaryApplicationHostConfigPath != null)
+                            AppServer.ApplicationHostConfigPath = TemporaryApplicationHostConfigPath;
 
                         appHostConfig.Save(AppServer.ApplicationHostConfigPath);
                     }
@@ -156,6 +156,33 @@ namespace Cogito.HostedWebCore
                     return;
 
                 logger?.LogInformation("Stopping AppHost...");
+
+                try
+                {
+                    AppServer.Stop();
+                }
+                finally
+                {
+                    try
+                    {
+                        if (TemporaryRootWebConfigPath != null && File.Exists(TemporaryRootWebConfigPath))
+                            File.Delete(TemporaryRootWebConfigPath);
+                    }
+                    catch (Exception e)
+                    {
+                        logger?.LogWarning(e, "Unable to delete temporary web config file.");
+                    }
+
+                    try
+                    {
+                        if (TemporaryApplicationHostConfigPath != null && File.Exists(TemporaryApplicationHostConfigPath))
+                            File.Delete(TemporaryApplicationHostConfigPath);
+                    }
+                    catch (Exception e)
+                    {
+                        logger?.LogWarning(e, "Unable to delete temporary application host file.");
+                    }
+                }
             }
         }
 

@@ -208,11 +208,11 @@ namespace Cogito.HostedWebCore
 
             // configure Web.config output path
             if (webConfigPath != null)
-                host.RootWebConfigPath = webConfigPath;
+                host.TemporaryRootWebConfigPath = webConfigPath;
 
             // configure App.config output path
             if (appConfigPath != null)
-                host.ApplicationHostConfigPath = appConfigPath;
+                host.TemporaryApplicationHostConfigPath = appConfigPath;
 
             return host;
         }
