@@ -132,7 +132,7 @@ namespace Cogito.HostedWebCore
         static class HostedWebCoreInternal
         {
 
-            static bool isActiviated;
+            static bool isActivated;
 
             delegate int FnWebCoreActivate([In, MarshalAs(UnmanagedType.LPWStr)]string appHostConfig, [In, MarshalAs(UnmanagedType.LPWStr)]string rootWebConfig, [In, MarshalAs(UnmanagedType.LPWStr)]string instanceName);
             delegate int FnWebCoreShutdown(bool immediate);
@@ -161,7 +161,7 @@ namespace Cogito.HostedWebCore
             /// <summary>
             /// Specifies if Hostable WebCore ha been activated
             /// </summary>
-            public static bool IsActivated => isActiviated;
+            public static bool IsActivated => isActivated;
 
             /// <summary>
             /// Activate the HWC.
@@ -171,11 +171,11 @@ namespace Cogito.HostedWebCore
             /// <param name="instanceName">Name for this instance</param>
             public static void Activate(string appHostConfig, string rootWebConfig, string instanceName)
             {
-                int result = WebCoreActivate(appHostConfig, rootWebConfig, instanceName);
-                if (result != 0)
-                    Marshal.ThrowExceptionForHR(result);
+                int hr = WebCoreActivate(appHostConfig, rootWebConfig, instanceName);
+                if (hr != 0)
+                    Marshal.ThrowExceptionForHR(hr);
 
-                isActiviated = true;
+                isActivated = true;
             }
 
             /// <summary>
@@ -183,10 +183,13 @@ namespace Cogito.HostedWebCore
             /// </summary>
             public static void Shutdown(bool immediate)
             {
-                if (isActiviated)
+                if (isActivated)
                 {
-                    WebCoreShutdown(immediate);
-                    isActiviated = false;
+                    int hr = WebCoreShutdown(immediate);
+                    if (hr != 0)
+                        Marshal.ThrowExceptionForHR(hr);
+
+                    isActivated = false;
                 }
             }
 
