@@ -14,6 +14,7 @@ namespace Cogito.HostedWebCore
     public static class AppServer
     {
 
+        static readonly object sync = new object();
         static readonly string HWEBCORE = Environment.ExpandEnvironmentVariables(@"%WINDIR%\system32\inetsrv\hwebcore.dll");
         static readonly string SYSTEM_WEB_CONFIG = Environment.ExpandEnvironmentVariables(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), @"config\web.config"));
 
@@ -45,64 +46,70 @@ namespace Cogito.HostedWebCore
         /// <summary>
         /// Returns <c>true</c> if the hosted web core is currently activated.
         /// </summary>
-        public static bool IsActivated => HostedWebCoreInternal.IsActivated;
+        public static bool IsActivated
+        {
+            get { lock (sync) return HostedWebCoreInternal.IsActivated; }
+        }
 
         /// <summary>
         /// Starts the hosted web server. 
         /// </summary>
         public static void Start()
         {
-            if (ApplicationHostConfigPath == null || ApplicationHostConfigPath == "")
-                throw new InvalidOperationException("ApplicationHostConfigPath cannot be blank.");
-            if (RootWebConfigPath == null || RootWebConfigPath == "")
-                throw new InvalidOperationException("RootWebConfigPath cannot be blank.");
-            if (InstanceName == null || InstanceName == "")
-                throw new InvalidOperationException("InstanceName cannot be blank.");
-            if (HostedWebCoreInternal.IsActivated)
-                throw new InvalidOperationException("Hostable Web Core is already running.");
+            lock (sync)
+            {
+                if (ApplicationHostConfigPath == null || ApplicationHostConfigPath == "")
+                    throw new InvalidOperationException("ApplicationHostConfigPath cannot be blank.");
+                if (RootWebConfigPath == null || RootWebConfigPath == "")
+                    throw new InvalidOperationException("RootWebConfigPath cannot be blank.");
+                if (InstanceName == null || InstanceName == "")
+                    throw new InvalidOperationException("InstanceName cannot be blank.");
+                if (HostedWebCoreInternal.IsActivated)
+                    throw new InvalidOperationException("Hostable Web Core is already running.");
 
-            if (File.Exists(HWEBCORE) == false)
-                throw new FileNotFoundException("Unable to find IIS Hostable Web Core entry point. Ensure IIS Hostable Web Core is installed.");
-            if (File.Exists(ApplicationHostConfigPath) == false)
-                throw new FileNotFoundException("Cannot find ApplicationHostConfigPath file.");
-            if (File.Exists(RootWebConfigPath) == false)
-                throw new FileNotFoundException("Cannot find RootWebConfigPath file.");
+                if (File.Exists(HWEBCORE) == false)
+                    throw new FileNotFoundException("Unable to find IIS Hostable Web Core entry point. Ensure IIS Hostable Web Core is installed.");
+                if (File.Exists(ApplicationHostConfigPath) == false)
+                    throw new FileNotFoundException("Cannot find ApplicationHostConfigPath file.");
+                if (File.Exists(RootWebConfigPath) == false)
+                    throw new FileNotFoundException("Cannot find RootWebConfigPath file.");
 
-            ValidateFilesExist(
-                "configuration/system.webServer/globalModules",
-                XDocument.Load(ApplicationHostConfigPath)
-                    .Elements("configuration")
-                    .Elements("system.webServer")
-                    .Elements("globalModules")
-                    .Elements("add")
-                    .Select(i => ((string)i.Attribute("name"), (string)i.Attribute("image")))
-                    .Where(i => !string.IsNullOrWhiteSpace(i.Item2)));
+                ValidateFilesExist(
+                    "configuration/system.webServer/globalModules",
+                    XDocument.Load(ApplicationHostConfigPath)
+                        .Elements("configuration")
+                        .Elements("system.webServer")
+                        .Elements("globalModules")
+                        .Elements("add")
+                        .Select(i => ((string)i.Attribute("name"), (string)i.Attribute("image")))
+                        .Where(i => !string.IsNullOrWhiteSpace(i.Item2)));
 
-            ValidateFilesExist(
-                "configuration/system.webServer/isapiFilters",
-                XDocument.Load(ApplicationHostConfigPath)
-                    .Elements("configuration")
-                    .Elements("system.webServer")
-                    .Elements("isapiFilters")
-                    .Elements("filter")
-                    .Select(i => ((string)i.Attribute("name"), (string)i.Attribute("path")))
-                    .Where(i => !string.IsNullOrWhiteSpace(i.Item2)));
+                ValidateFilesExist(
+                    "configuration/system.webServer/isapiFilters",
+                    XDocument.Load(ApplicationHostConfigPath)
+                        .Elements("configuration")
+                        .Elements("system.webServer")
+                        .Elements("isapiFilters")
+                        .Elements("filter")
+                        .Select(i => ((string)i.Attribute("name"), (string)i.Attribute("path")))
+                        .Where(i => !string.IsNullOrWhiteSpace(i.Item2)));
 
-            ValidateFilesExist(
-                "configuration/location/system.webServer/handlers",
-                XDocument.Load(ApplicationHostConfigPath)
-                    .Elements("configuration")
-                    .Elements("location")
-                    .Elements("system.webServer")
-                    .Elements("handlers")
-                    .Elements("add")
-                    .Select(i => ((string)i.Attribute("name"), (string)i.Attribute("scriptProcessor")))
-                    .Where(i => !string.IsNullOrWhiteSpace(i.Item2)));
+                ValidateFilesExist(
+                    "configuration/location/system.webServer/handlers",
+                    XDocument.Load(ApplicationHostConfigPath)
+                        .Elements("configuration")
+                        .Elements("location")
+                        .Elements("system.webServer")
+                        .Elements("handlers")
+                        .Elements("add")
+                        .Select(i => ((string)i.Attribute("name"), (string)i.Attribute("scriptProcessor")))
+                        .Where(i => !string.IsNullOrWhiteSpace(i.Item2)));
 
-            HostedWebCoreInternal.Activate(
-                ApplicationHostConfigPath,
-                RootWebConfigPath,
-                InstanceName);
+                HostedWebCoreInternal.Activate(
+                    ApplicationHostConfigPath,
+                    RootWebConfigPath,
+                    InstanceName);
+            }
         }
 
         /// <summary>
@@ -122,8 +129,11 @@ namespace Cogito.HostedWebCore
         /// </summary>
         public static void Stop()
         {
-            if (HostedWebCoreInternal.IsActivated)
-                HostedWebCoreInternal.Shutdown(false);
+            lock (sync)
+            {
+                if (HostedWebCoreInternal.IsActivated)
+                    HostedWebCoreInternal.Shutdown(false);
+            }
         }
 
         /// <summary>
