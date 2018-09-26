@@ -40,6 +40,16 @@ namespace Cogito.HostedWebCore
         }
 
         /// <summary>
+        /// Desired path of the temporary Web.config file.
+        /// </summary>
+        public string RootWebConfigPath { get; set; } = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("n") + ".Web.config");
+
+        /// <summary>
+        /// Desired path of the temporary ApplicationHost.config file.
+        /// </summary>
+        public string ApplicationHostConfigPath { get; set; } = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("n") + ".ApplicationHost.config");
+
+        /// <summary>
         /// Starts the web host.
         /// </summary>
         public void Start()
@@ -49,9 +59,20 @@ namespace Cogito.HostedWebCore
                 try
                 {
                     if (rootWebConfig != null)
-                        rootWebConfig.Save(AppServer.RootWebConfigPath = Path.Combine(Path.GetTempFileName() + ".Web.config"));
+                    {
+                        if (RootWebConfigPath != null)
+                            AppServer.RootWebConfigPath = RootWebConfigPath;
+
+                        rootWebConfig.Save(AppServer.RootWebConfigPath);
+                    }
+
                     if (appHostConfig != null)
-                        appHostConfig.Save(AppServer.ApplicationHostConfigPath = Path.Combine(Path.GetTempFileName() + ".ApplicationHost.config"));
+                    {
+                        if (ApplicationHostConfigPath != null)
+                            AppServer.ApplicationHostConfigPath = ApplicationHostConfigPath;
+
+                        appHostConfig.Save(AppServer.ApplicationHostConfigPath);
+                    }
                 }
                 catch (IOException e)
                 {

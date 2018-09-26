@@ -20,6 +20,30 @@ namespace Cogito.HostedWebCore
         WebConfigurator rootWebConfigurator;
         AppHostConfigurator appHostConfigurator;
         ILogger logger;
+        string webConfigPath;
+        string appConfigPath;
+
+        /// <summary>
+        /// Sets the path of the temporary generated Web.config file.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public AppHostBuilder SetWebConfigPath(string path)
+        {
+            webConfigPath = Environment.ExpandEnvironmentVariables(path);
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the path of the temporary generated ApplicationHost.config file.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public AppHostBuilder SetAppConfigPath(string path)
+        {
+            appConfigPath = Environment.ExpandEnvironmentVariables(path);
+            return this;
+        }
 
         /// <summary>
         /// Configures the specified logger.
@@ -176,10 +200,21 @@ namespace Cogito.HostedWebCore
             var rootWebXml = rootWebConfigurator != null ? new XDocument(rootWebConfigurator.Element) : null;
             var appHostXml = appHostConfigurator != null ? new XDocument(appHostConfigurator.Element) : null;
 
-            return new AppHost(
+            // build new host
+            var host = new AppHost(
                 rootWebXml,
                 appHostXml,
                 logger);
+
+            // configure Web.config output path
+            if (webConfigPath != null)
+                host.RootWebConfigPath = webConfigPath;
+
+            // configure App.config output path
+            if (appConfigPath != null)
+                host.ApplicationHostConfigPath = appConfigPath;
+
+            return host;
         }
 
     }

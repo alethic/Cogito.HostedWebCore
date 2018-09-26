@@ -15,6 +15,8 @@ namespace Cogito.HostedWebCore.Tests
                 .AddConsole();
 
             new AppHostBuilder()
+                .SetAppConfigPath("%TEMP%\\ApplicationHost.config")
+                .SetWebConfigPath("%TEMP%\\Web.config")
                 .UseLogger(f.CreateLogger(""))
                 .ConfigureWeb(c => c.Location("Foo", l => l.Element.Add(new XElement("bar"))))
                 .ConfigureApp(c => c
