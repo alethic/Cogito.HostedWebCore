@@ -58,32 +58,42 @@ namespace Cogito.HostedWebCore
             {
                 try
                 {
-                    if (rootWebConfig != null)
+                    try
                     {
-                        if (TemporaryRootWebConfigPath != null)
-                            AppServer.RootWebConfigPath = TemporaryRootWebConfigPath;
+                        if (rootWebConfig != null)
+                        {
+                            if (TemporaryRootWebConfigPath != null)
+                                AppServer.RootWebConfigPath = TemporaryRootWebConfigPath;
 
-                        rootWebConfig.Save(AppServer.RootWebConfigPath);
+                            rootWebConfig.Save(AppServer.RootWebConfigPath);
+                        }
+
+                        if (appHostConfig != null)
+                        {
+                            if (TemporaryApplicationHostConfigPath != null)
+                                AppServer.ApplicationHostConfigPath = TemporaryApplicationHostConfigPath;
+
+                            appHostConfig.Save(AppServer.ApplicationHostConfigPath);
+                        }
+                    }
+                    catch (IOException e)
+                    {
+                        throw new AppHostException("Unable to save app host configuration.", e);
                     }
 
-                    if (appHostConfig != null)
-                    {
-                        if (TemporaryApplicationHostConfigPath != null)
-                            AppServer.ApplicationHostConfigPath = TemporaryApplicationHostConfigPath;
+                    if (AppServer.IsActivated)
+                        throw new AppHostException("AppHost is already activated within this process.");
 
-                        appHostConfig.Save(AppServer.ApplicationHostConfigPath);
-                    }
+                    LogStart();
+                    AppServer.Start();
                 }
-                catch (IOException e)
+                catch
                 {
-                    throw new AppHostException("Unable to save app host configuration.", e);
+                    // any sort of failures and we should attempt to clean up our config files
+                    TryRemoveConfigFiles();
+
+                    throw;
                 }
-
-                if (AppServer.IsActivated)
-                    throw new AppHostException("AppHost is already activated within this process.");
-
-                LogStart();
-                AppServer.Start();
             }
         }
 
@@ -163,26 +173,34 @@ namespace Cogito.HostedWebCore
                 }
                 finally
                 {
-                    try
-                    {
-                        if (TemporaryRootWebConfigPath != null && File.Exists(TemporaryRootWebConfigPath))
-                            File.Delete(TemporaryRootWebConfigPath);
-                    }
-                    catch (Exception e)
-                    {
-                        logger?.LogWarning(e, "Unable to delete temporary web config file.");
-                    }
-
-                    try
-                    {
-                        if (TemporaryApplicationHostConfigPath != null && File.Exists(TemporaryApplicationHostConfigPath))
-                            File.Delete(TemporaryApplicationHostConfigPath);
-                    }
-                    catch (Exception e)
-                    {
-                        logger?.LogWarning(e, "Unable to delete temporary application host file.");
-                    }
+                    TryRemoveConfigFiles();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Attempts to remove any temporary configuration files.
+        /// </summary>
+        void TryRemoveConfigFiles()
+        {
+            try
+            {
+                if (TemporaryRootWebConfigPath != null && File.Exists(TemporaryRootWebConfigPath))
+                    File.Delete(TemporaryRootWebConfigPath);
+            }
+            catch (Exception e)
+            {
+                logger?.LogWarning(e, "Unable to delete temporary web config file.");
+            }
+
+            try
+            {
+                if (TemporaryApplicationHostConfigPath != null && File.Exists(TemporaryApplicationHostConfigPath))
+                    File.Delete(TemporaryApplicationHostConfigPath);
+            }
+            catch (Exception e)
+            {
+                logger?.LogWarning(e, "Unable to delete temporary application host file.");
             }
         }
 
