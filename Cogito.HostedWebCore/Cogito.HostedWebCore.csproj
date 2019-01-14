@@ -7,6 +7,7 @@
     <Authors>Jerome Haltom</Authors>
     <Description>Provides routines to initialize and host the IIS Hosted Web Core.</Description>
     <Copyright>Jerome Haltom</Copyright>
+    <PackageIconUrl>https://cloverluxussc.blob.core.windows.net/public/cogito-nuget-icon.png</PackageIconUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

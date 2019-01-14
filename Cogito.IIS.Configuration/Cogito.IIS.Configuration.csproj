@@ -6,6 +6,7 @@
     <Authors>Jerome Haltom</Authors>
     <Company />
     <Description>Provides utilities to configure ApplicationHost.config files and other IIS artifacts.</Description>
+    <PackageIconUrl>https://cloverluxussc.blob.core.windows.net/public/cogito-nuget-icon.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
