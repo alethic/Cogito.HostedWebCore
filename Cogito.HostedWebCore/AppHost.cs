@@ -67,7 +67,13 @@ namespace Cogito.HostedWebCore
 
                             rootWebConfig.Save(AppServer.RootWebConfigPath);
                         }
-
+                    }
+                    catch (IOException e)
+                    {
+                        throw new AppHostException("Unable to save web host configuration.", e);
+                    }
+                    try
+                    {
                         if (appHostConfig != null)
                         {
                             if (TemporaryApplicationHostConfigPath != null)
