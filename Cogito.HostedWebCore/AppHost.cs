@@ -191,8 +191,8 @@ namespace Cogito.HostedWebCore
         {
             try
             {
-                if (TemporaryRootWebConfigPath != null && File.Exists(TemporaryRootWebConfigPath))
-                    File.Delete(TemporaryRootWebConfigPath);
+                if (AppServer.RootWebConfigPath != null && File.Exists(AppServer.RootWebConfigPath))
+                    File.Delete(AppServer.RootWebConfigPath);
             }
             catch (Exception e)
             {
@@ -201,8 +201,8 @@ namespace Cogito.HostedWebCore
 
             try
             {
-                if (TemporaryApplicationHostConfigPath != null && File.Exists(TemporaryApplicationHostConfigPath))
-                    File.Delete(TemporaryApplicationHostConfigPath);
+                if (AppServer.ApplicationHostConfigPath != null && File.Exists(AppServer.ApplicationHostConfigPath))
+                    File.Delete(AppServer.ApplicationHostConfigPath);
             }
             catch (Exception e)
             {
