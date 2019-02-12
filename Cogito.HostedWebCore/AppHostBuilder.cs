@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
@@ -22,6 +23,8 @@ namespace Cogito.HostedWebCore
         ILogger logger;
         string webConfigPath;
         string appConfigPath;
+        List<Action<AppHost>> onStartedHooks = new List<Action<AppHost>>();
+        List<Action<AppHost>> onStoppedHooks = new List<Action<AppHost>>();
 
         /// <summary>
         /// Sets the path of the temporary generated Web.config file.
@@ -42,6 +45,28 @@ namespace Cogito.HostedWebCore
         public AppHostBuilder SetAppConfigPath(string path)
         {
             appConfigPath = Environment.ExpandEnvironmentVariables(path);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a delegate to be invoked when the application is started.
+        /// </summary>
+        /// <param name="hook"></param>
+        /// <returns></returns>
+        public AppHostBuilder OnStarted(Action<AppHost> hook)
+        {
+            onStartedHooks.Add(hook);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a delegate to be invoked when the application is stopped.
+        /// </summary>
+        /// <param name="hook"></param>
+        /// <returns></returns>
+        public AppHostBuilder OnStopped(Action<AppHost> hook)
+        {
+            onStoppedHooks.Add(hook);
             return this;
         }
 
@@ -204,6 +229,8 @@ namespace Cogito.HostedWebCore
             var host = new AppHost(
                 rootWebXml,
                 appHostXml,
+                onStartedHooks,
+                onStoppedHooks,
                 logger);
 
             // configure Web.config output path

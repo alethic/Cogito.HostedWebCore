@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,8 @@ namespace Cogito.HostedWebCore
         readonly static object sync = new object();
         readonly XDocument rootWebConfig;
         readonly XDocument appHostConfig;
+        readonly IList<Action<AppHost>> onStartedHooks;
+        readonly IList<Action<AppHost>> onStoppedHooks;
         readonly ILogger logger;
 
         /// <summary>
@@ -28,14 +31,20 @@ namespace Cogito.HostedWebCore
         /// </summary>
         /// <param name="rootWebConfig"></param>
         /// <param name="appHostConfig"></param>
+        /// <param name="onStartedHooks"></param>
+        /// <param name="onStoppedHooks"></param>
         /// <param name="logger"></param>
         internal AppHost(
             XDocument rootWebConfig,
             XDocument appHostConfig,
+            IList<Action<AppHost>> onStartedHooks = null,
+            IList<Action<AppHost>> onStoppedHooks = null,
             ILogger logger = null)
         {
             this.rootWebConfig = rootWebConfig;
             this.appHostConfig = appHostConfig;
+            this.onStartedHooks = onStartedHooks;
+            this.onStoppedHooks = onStoppedHooks;
             this.logger = logger;
         }
 
@@ -86,6 +95,10 @@ namespace Cogito.HostedWebCore
 
                     LogStart();
                     AppServer.Start();
+
+                    // invoke the on-started hooks
+                    foreach (var h in onStartedHooks ?? Enumerable.Empty<Action<AppHost>>())
+                        h?.Invoke(this);
                 }
                 catch
                 {
@@ -170,6 +183,10 @@ namespace Cogito.HostedWebCore
                 try
                 {
                     AppServer.Stop();
+
+                    // invoke the on-stopped hooks
+                    foreach (var h in onStoppedHooks ?? Enumerable.Empty<Action<AppHost>>())
+                        h?.Invoke(this);
                 }
                 finally
                 {
