@@ -38,6 +38,11 @@ namespace Cogito.Web.Configuration
             return this.Configure("compilation", e => configure?.Invoke(new WebSystemWebCompilationConfigurator(e)));
         }
 
+        public WebSystemWebConfigurator SessionState(Action<WebSystemWebSessionStateConfigurator> configure)
+        {
+            return this.Configure("sessionState", e => configure?.Invoke(new WebSystemWebSessionStateConfigurator(e)));
+        }
+
     }
 
 }
