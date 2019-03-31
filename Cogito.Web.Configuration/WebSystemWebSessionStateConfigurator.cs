@@ -35,12 +35,7 @@ namespace Cogito.Web.Configuration
         /// <returns></returns>
         WebSystemWebSessionStateConfigurator SetAttributeValue(string attributeName, string attributeValue)
         {
-            if (attributeValue == null)
-                element.Attribute(attributeName)?.Remove();
-            else
-                element.SetAttributeValue(attributeName, attributeValue);
-
-            return this;
+            return this.Configure(e => e.SetAttributeValue(attributeName, attributeValue));
         }
 
         /// <summary>
@@ -86,21 +81,41 @@ namespace Cogito.Web.Configuration
         /// <summary>
         /// Sets the 'sqlCommandTimeout' attribute.
         /// </summary>
-        /// <param name="sqlCommandTimeout"></param>
+        /// <param name="timeout"></param>
         /// <returns></returns>
-        public WebSystemWebSessionStateConfigurator SqlCommandTimeout(TimeSpan? sqlCommandTimeout)
+        public WebSystemWebSessionStateConfigurator SqlCommandTimeout(TimeSpan? timeout)
         {
-            return SetAttributeValue("sqlCommandTimeout", sqlCommandTimeout.HasValue ? ((int)sqlCommandTimeout.Value.TotalSeconds).ToString() : null);
+            return SetAttributeValue("sqlCommandTimeout", timeout.HasValue ? ((int)timeout.Value.TotalSeconds).ToString() : null);
+        }
+
+        /// <summary>
+        /// Sets the 'sqlCommandTimeout' attribute.
+        /// </summary>
+        /// <param name="seconds"></param>
+        /// <returns></returns>
+        public WebSystemWebSessionStateConfigurator SqlCommandTimeout(int seconds)
+        {
+            return SqlCommandTimeout(TimeSpan.FromSeconds(seconds));
         }
 
         /// <summary>
         /// Sets the 'sqlConnectionRetryInterval' attribute.
         /// </summary>
-        /// <param name="sqlConnectionRetryInterval"></param>
+        /// <param name="interval"></param>
         /// <returns></returns>
-        public WebSystemWebSessionStateConfigurator SqlConnectionRetryInterval(TimeSpan? sqlConnectionRetryInterval)
+        public WebSystemWebSessionStateConfigurator SqlConnectionRetryInterval(TimeSpan? interval)
         {
-            return SetAttributeValue("sqlConnectionRetryInterval", sqlConnectionRetryInterval.HasValue ? ((int)sqlConnectionRetryInterval.Value.TotalSeconds).ToString() : null);
+            return SetAttributeValue("sqlConnectionRetryInterval", interval.HasValue ? ((int)interval.Value.TotalSeconds).ToString() : null);
+        }
+
+        /// <summary>
+        /// Sets the 'sqlConnectionRetryInterval' attribute.
+        /// </summary>
+        /// <param name="seconds"></param>
+        /// <returns></returns>
+        public WebSystemWebSessionStateConfigurator SqlConnectionRetryInterval(int seconds)
+        {
+            return SqlConnectionRetryInterval(TimeSpan.FromSeconds(seconds));
         }
 
         /// <summary>
@@ -164,6 +179,16 @@ namespace Cogito.Web.Configuration
         }
 
         /// <summary>
+        /// Sets the 'timeout' attribute.
+        /// </summary>
+        /// <param name="seconds"></param>
+        /// <returns></returns>
+        public WebSystemWebSessionStateConfigurator Timeout(int seconds)
+        {
+            return Timeout(TimeSpan.FromSeconds(seconds));
+        }
+
+        /// <summary>
         /// Sets the 'partitionResolverType' attribute.
         /// </summary>
         /// <param name="partitionResolverType"></param>
@@ -171,6 +196,16 @@ namespace Cogito.Web.Configuration
         public WebSystemWebSessionStateConfigurator PartitionResolverType(string partitionResolverType)
         {
             return SetAttributeValue("partitionResolverType", partitionResolverType);
+        }
+
+        /// <summary>
+        /// Sets the 'partitionResolverType' attribute.
+        /// </summary>
+        /// <param name="partitionResolverType"></param>
+        /// <returns></returns>
+        public WebSystemWebSessionStateConfigurator PartitionResolverType(Type partitionResolverType)
+        {
+            return PartitionResolverType(partitionResolverType?.AssemblyQualifiedName);
         }
 
         /// <summary>
@@ -191,6 +226,16 @@ namespace Cogito.Web.Configuration
         public WebSystemWebSessionStateConfigurator SessionIDManagerType(string sessionIDManagerType)
         {
             return SetAttributeValue("sessionIDManagerType", sessionIDManagerType);
+        }
+
+        /// <summary>
+        /// Sets the 'sessionIDManagerType' attribute.
+        /// </summary>
+        /// <param name="sessionIDManagerType"></param>
+        /// <returns></returns>
+        public WebSystemWebSessionStateConfigurator SessionIDManagerType(Type sessionIDManagerType)
+        {
+            return SessionIDManagerType(sessionIDManagerType?.AssemblyQualifiedName);
         }
 
         /// <summary>
