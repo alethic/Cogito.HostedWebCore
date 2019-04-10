@@ -58,6 +58,12 @@ namespace Cogito.Web.Configuration
             return this;
         }
 
+        public WebSystemWebServerAspConfigurator Limits(Action<WebSystemWebServerAspLimitsConfigurator> configure)
+        {
+            this.Configure("limits", e => configure?.Invoke(new WebSystemWebServerAspLimitsConfigurator(e)));
+            return this;
+        }
+
         public WebSystemWebServerAspConfigurator Session(Action<WebSystemWebServerAspSessionConfigurator> configure)
         {
             this.Configure("session", e => configure?.Invoke(new WebSystemWebServerAspSessionConfigurator(e)));
