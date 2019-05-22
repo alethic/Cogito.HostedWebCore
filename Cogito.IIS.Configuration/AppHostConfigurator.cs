@@ -39,6 +39,31 @@ namespace Cogito.IIS.Configuration
         public XElement Element => element;
 
         /// <summary>
+        /// Configures an application pool.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public AppHostConfigurator ApplicationPool(string name, Action<AppHostApplicationPoolConfigurator> configure = null)
+        {
+            if (name == null)
+                throw new ArgumentException(nameof(name));
+
+            var e = element
+                .Elements("system.applicationHost")
+                .Elements("applicationPools")
+                .Elements("add")
+                .FirstOrDefault(i => (string)i.Attribute("name") == name);
+            if (e == null)
+                element.Add(e =
+                    new XElement("applicationPools",
+                        new XAttribute("name", name)));
+
+            configure?.Invoke(new AppHostApplicationPoolConfigurator(e));
+            return this;
+        }
+
+        /// <summary>
         /// Configures a site.
         /// </summary>
         /// <param name="path"></param>
