@@ -41,7 +41,7 @@ namespace Cogito.IIS.Configuration
         /// <summary>
         /// Configures an application pool.
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="name"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
         public AppHostConfigurator ApplicationPool(string name, Action<AppHostApplicationPoolConfigurator> configure = null)
@@ -50,14 +50,26 @@ namespace Cogito.IIS.Configuration
                 throw new ArgumentException(nameof(name));
 
             var e = element
-                .Elements("system.applicationHost")
-                .Elements("applicationPools")
-                .Elements("add")
-                .FirstOrDefault(i => (string)i.Attribute("name") == name);
-            if (e == null)
-                element.Add(e =
-                    new XElement("applicationPools",
-                        new XAttribute("name", name)));
+                .ElementOrAdd("system.applicationHost")
+                .ElementOrAdd("applicationPools")
+                .ElementOrAdd("add", i => (string)i.Attribute("name") == name);
+
+            e.SetAttributeValue("name", name);
+            configure?.Invoke(new AppHostApplicationPoolConfigurator(e));
+            return this;
+        }
+
+        /// <summary>
+        /// Configures the 'applicationPoolDefaults' section.
+        /// </summary>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public AppHostConfigurator ApplicationPoolDefaults(Action<AppHostApplicationPoolConfigurator> configure = null)
+        {
+            var e = element
+                .ElementOrAdd("system.applicationHost")
+                .ElementOrAdd("applicationPools")
+                .ElementOrAdd("applicationPoolDefaults");
 
             configure?.Invoke(new AppHostApplicationPoolConfigurator(e));
             return this;
@@ -66,7 +78,6 @@ namespace Cogito.IIS.Configuration
         /// <summary>
         /// Configures a site.
         /// </summary>
-        /// <param name="path"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
         public AppHostConfigurator Site(int id, Action<AppHostSiteConfigurator> configure = null)

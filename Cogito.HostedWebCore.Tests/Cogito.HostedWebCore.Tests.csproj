@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net47</TargetFramework>
@@ -26,6 +26,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Cogito.HostedWebCore\Cogito.HostedWebCore.csproj" />
     <ProjectReference Include="..\Cogito.IIS.Configuration\Cogito.IIS.Configuration.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ApplicationHost.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

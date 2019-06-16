@@ -29,6 +29,16 @@ namespace Cogito.Web.Configuration
         public XElement Element => element;
 
         /// <summary>
+        /// Configures the 'httpRuntime' element.
+        /// </summary>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public WebSystemWebConfigurator HttpRuntime(Action<WebSystemWebHttpRuntimeConfigurator> configure)
+        {
+            return this.Configure("compilation", e => configure?.Invoke(new WebSystemWebHttpRuntimeConfigurator(e)));
+        }
+
+        /// <summary>
         /// Configures the 'compilation' element.
         /// </summary>
         /// <param name="configurator"></param>
@@ -38,6 +48,11 @@ namespace Cogito.Web.Configuration
             return this.Configure("compilation", e => configure?.Invoke(new WebSystemWebCompilationConfigurator(e)));
         }
 
+        /// <summary>
+        /// Configures the 'sessionState' element.
+        /// </summary>
+        /// <param name="configure"></param>
+        /// <returns></returns>
         public WebSystemWebConfigurator SessionState(Action<WebSystemWebSessionStateConfigurator> configure)
         {
             return this.Configure("sessionState", e => configure?.Invoke(new WebSystemWebSessionStateConfigurator(e)));

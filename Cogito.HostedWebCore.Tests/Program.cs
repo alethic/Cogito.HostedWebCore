@@ -12,15 +12,16 @@ namespace Cogito.HostedWebCore.Tests
 
         public static void Main()
         {
-            var f = new LoggerFactory()
-                .AddConsole();
 
             new AppHostBuilder()
                 .SetAppConfigPath("%TEMP%\\ApplicationHost.config")
                 .SetWebConfigPath("%TEMP%\\Web.config")
-                .UseLogger(f.CreateLogger(""))
+                .UseLogger(new LoggerFactory().AddConsole().CreateLogger(""))
                 .ConfigureWeb(c => c.Location("Foo", l => l.Element.Add(new XElement("bar"))))
-                .ConfigureApp(c => c
+                .ConfigureApp("ApplicationHost.config", c => c
+                    .ApplicationPoolDefaults(p => p
+                        .ProcessModel(m => m   
+                            .ShutdownTimeLimit(TimeSpan.FromMinutes(15))))
                     .Site(1, s => s
                         .RemoveBindings()
                         .AddHttpBinding("localhost", 12311)
