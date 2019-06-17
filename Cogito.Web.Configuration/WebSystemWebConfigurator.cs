@@ -35,7 +35,7 @@ namespace Cogito.Web.Configuration
         /// <returns></returns>
         public WebSystemWebConfigurator HttpRuntime(Action<WebSystemWebHttpRuntimeConfigurator> configure)
         {
-            return this.Configure("compilation", e => configure?.Invoke(new WebSystemWebHttpRuntimeConfigurator(e)));
+            return this.Configure("httpRuntime", e => configure?.Invoke(new WebSystemWebHttpRuntimeConfigurator(e)));
         }
 
         /// <summary>
