@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -51,12 +52,12 @@ namespace Cogito.HostedWebCore
         /// <summary>
         /// Desired path of the temporary Web.config file.
         /// </summary>
-        public string TemporaryRootWebConfigPath { get; set; } = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("n") + ".Web.config");
+        public string TemporaryRootWebConfigPath { get; set; } = Path.Combine(Path.GetTempPath(), Process.GetCurrentProcess().Id + ".Web.config");
 
         /// <summary>
         /// Desired path of the temporary ApplicationHost.config file.
         /// </summary>
-        public string TemporaryApplicationHostConfigPath { get; set; } = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("n") + ".ApplicationHost.config");
+        public string TemporaryApplicationHostConfigPath { get; set; } = Path.Combine(Path.GetTempPath(), Process.GetCurrentProcess().Id + ".ApplicationHost.config");
 
         /// <summary>
         /// Starts the web host.
