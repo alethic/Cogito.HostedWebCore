@@ -71,7 +71,7 @@ namespace Cogito.Web.Configuration
 
         public WebSystemWebServerAspConfigurator CodePage(uint? value = null)
         {
-            return SetAttributeValue("calcLineNumber", value);
+            return SetAttributeValue("codePage", value);
         }
 
         public WebSystemWebServerAspConfigurator EnableApplicationRestart(bool? enabled = null)
