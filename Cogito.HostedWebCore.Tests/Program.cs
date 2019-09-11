@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Xml.Linq;
 
 using Cogito.IIS.Configuration;
+using Cogito.Web.Configuration;
+
 using Microsoft.Extensions.Logging;
 
 namespace Cogito.HostedWebCore.Tests
@@ -12,19 +13,20 @@ namespace Cogito.HostedWebCore.Tests
 
         public static void Main()
         {
-
             new AppHostBuilder()
                 .SetAppConfigPath("%TEMP%\\ApplicationHost.config")
                 .SetWebConfigPath("%TEMP%\\Web.config")
                 .UseLogger(new LoggerFactory().AddConsole().CreateLogger(""))
-                .ConfigureWeb(c => c.Location("Foo", l => l.Element.Add(new XElement("bar"))))
+                .ConfigureWeb("Web.config", c => c
+                    .SystemWeb(w => w
+                        .Compilation(z => z.TempDirectory(Environment.ExpandEnvironmentVariables(@"%TEMP%\T")))))
                 .ConfigureApp("ApplicationHost.config", c => c
                     .ApplicationPoolDefaults(p => p
-                        .ProcessModel(m => m   
+                        .ProcessModel(m => m
                             .ShutdownTimeLimit(TimeSpan.FromMinutes(15))))
                     .Site(1, s => s
                         .RemoveBindings()
-                        .AddHttpBinding("localhost", 12311)
+                        .AddHttpBinding("localhost", 11010)
                         .Application("/", a => a
                             .VirtualDirectory("/", v => v.UsePhysicalPath("wwwroot")))
                         .UseFailedRequestLogging(@"%TEMP%\log.txt")))
