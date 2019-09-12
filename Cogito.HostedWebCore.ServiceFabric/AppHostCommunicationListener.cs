@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Fabric;
-using System.Fabric.Description;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,18 +49,11 @@ namespace Cogito.HostedWebCore.ServiceFabric
                 throw new InvalidOperationException($"Endpoint not found: {endpointName}.");
 
             // derive binding information from endpoint
-            if (endpoint.Protocol != EndpointProtocol.Http &&
-                endpoint.UriScheme != "http")
-                throw new InvalidOperationException("Only HTTP endpoints are supported.");
+            if (endpoint.UriScheme != "http")
+                throw new InvalidOperationException("Only endpoints with UriSchema of 'http' are supported.");
 
-            var bindings = new[]
-            {
-                new BindingData("http", $"*:{endpoint.Port}:"),
-                new BindingData("http", $"*:{endpoint.Port}:{serviceContext.NodeContext.IPAddressOrFQDN}"),
-            };
-
-            // host was not created
-            appHost = build(bindings, "/", this);
+            // generate app host
+            appHost = build(new[] { new BindingData("http", $"*:{endpoint.Port}:*") }, "/", this);
             if (appHost == null)
                 throw new AppHostException("Invalid AppHost.");
 

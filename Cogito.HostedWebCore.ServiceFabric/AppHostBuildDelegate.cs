@@ -1,8 +1,10 @@
-﻿using Cogito.IIS.Configuration;
+﻿using System.Collections.Generic;
+
+using Cogito.IIS.Configuration;
 
 namespace Cogito.HostedWebCore.ServiceFabric
 {
 
-    public delegate AppHost AppHostBuildDelegate(BindingData[] bindings, string path, AppHostCommunicationListener listener);
+    public delegate AppHost AppHostBuildDelegate(IEnumerable<BindingData> bindings, string path, AppHostCommunicationListener listener);
 
 }

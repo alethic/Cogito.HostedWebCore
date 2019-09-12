@@ -1,4 +1,6 @@
-﻿namespace Cogito.IIS.Configuration
+﻿using System;
+
+namespace Cogito.IIS.Configuration
 {
 
     /// <summary>
@@ -36,6 +38,10 @@
         /// </summary>
         public string BindingInformation { get; set; }
 
+        public object Yield()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }
