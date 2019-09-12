@@ -4,6 +4,8 @@ using System.Fabric.Description;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Cogito.IIS.Configuration;
+
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 
 namespace Cogito.HostedWebCore.ServiceFabric
@@ -41,26 +43,33 @@ namespace Cogito.HostedWebCore.ServiceFabric
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<string> OpenAsync(CancellationToken cancellationToken)
+        public async Task<string> OpenAsync(CancellationToken cancellationToken)
         {
             var endpoint = serviceContext.CodePackageActivationContext.GetEndpoint(endpointName);
             if (endpoint == null)
                 throw new InvalidOperationException($"Endpoint not found: {endpointName}.");
 
             // derive binding information from endpoint
-            if (endpoint.Protocol != EndpointProtocol.Http)
+            if (endpoint.Protocol != EndpointProtocol.Http &&
+                endpoint.UriScheme != "http")
                 throw new InvalidOperationException("Only HTTP endpoints are supported.");
 
+            var bindings = new[]
+            {
+                new BindingData("http", $"*:{endpoint.Port}:"),
+                new BindingData("http", $"*:{endpoint.Port}:{serviceContext.NodeContext.IPAddressOrFQDN}"),
+            };
+
             // host was not created
-            appHost = build("http", $"*:{endpoint.Port}:", "/", this);
+            appHost = build(bindings, "/", this);
             if (appHost == null)
                 throw new AppHostException("Invalid AppHost.");
 
             // start application host
-            appHost.Start();
+            await Task.Run(() => appHost.Start());
 
             // return final listen address
-            return Task.FromResult($"http://{serviceContext.NodeContext.IPAddressOrFQDN}:{endpoint.Port}");
+            return $"http://{serviceContext.NodeContext.IPAddressOrFQDN}:{endpoint.Port}";
         }
 
         /// <summary>
@@ -69,15 +78,13 @@ namespace Cogito.HostedWebCore.ServiceFabric
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task CloseAsync(CancellationToken cancellationToken)
+        public async Task CloseAsync(CancellationToken cancellationToken)
         {
             if (appHost != null)
             {
-                appHost.Stop();
+                await Task.Run(() => appHost.Stop());
                 appHost = null;
             }
-
-            return Task.CompletedTask;
         }
 
         /// <summary>

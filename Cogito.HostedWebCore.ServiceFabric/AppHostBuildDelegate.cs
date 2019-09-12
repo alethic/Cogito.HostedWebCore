@@ -1,6 +1,8 @@
-﻿namespace Cogito.HostedWebCore.ServiceFabric
+﻿using Cogito.IIS.Configuration;
+
+namespace Cogito.HostedWebCore.ServiceFabric
 {
 
-    public delegate AppHost AppHostBuildDelegate(string protocol, string bindingInformation, string path, AppHostCommunicationListener listener);
+    public delegate AppHost AppHostBuildDelegate(BindingData[] bindings, string path, AppHostCommunicationListener listener);
 
 }

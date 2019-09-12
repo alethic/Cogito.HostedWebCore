@@ -87,7 +87,7 @@ namespace Cogito.HostedWebCore
         /// <param name="rootWebConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureWeb(XElement rootWebConfig, Action<WebConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(XElement rootWebConfig, Action<WebConfigurator> configure = null)
         {
             if (rootWebConfig != null)
                 configure?.Invoke(rootWebConfigurator = new WebConfigurator(rootWebConfig));
@@ -101,12 +101,12 @@ namespace Cogito.HostedWebCore
         /// <param name="rootWebConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureWeb(XDocument rootWebConfig, Action<WebConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(XDocument rootWebConfig, Action<WebConfigurator> configure = null)
         {
             if (rootWebConfig == null)
                 throw new ArgumentNullException(nameof(rootWebConfig));
 
-            return ConfigureWeb(rootWebConfig?.Root, configure);
+            return ConfigureWeb(rootWebConfig.Root, configure);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Cogito.HostedWebCore
         /// <param name="rootWebConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureWeb(string rootWebConfig, Action<WebConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(string rootWebConfig, Action<WebConfigurator> configure = null)
         {
             if (rootWebConfig == null)
                 throw new ArgumentNullException(nameof(rootWebConfig));
@@ -129,7 +129,7 @@ namespace Cogito.HostedWebCore
         /// <param name="rootWebConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureWeb(Stream rootWebConfig, Action<WebConfigurator> configure)
+        public AppHostBuilder ConfigureWeb(Stream rootWebConfig, Action<WebConfigurator> configure = null)
         {
             if (rootWebConfig == null)
                 throw new ArgumentNullException(nameof(rootWebConfig));
@@ -154,7 +154,7 @@ namespace Cogito.HostedWebCore
         /// <param name="appHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureApp(XElement appHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder ConfigureApp(XElement appHostConfig, Action<AppHostConfigurator> configure = null)
         {
             if (appHostConfig == null)
                 throw new ArgumentNullException(nameof(appHostConfig));
@@ -169,7 +169,7 @@ namespace Cogito.HostedWebCore
         /// <param name="appHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureApp(XDocument appHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder ConfigureApp(XDocument appHostConfig, Action<AppHostConfigurator> configure = null)
         {
             if (appHostConfig == null)
                 throw new ArgumentNullException(nameof(appHostConfig));
@@ -183,7 +183,7 @@ namespace Cogito.HostedWebCore
         /// <param name="appHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureApp(string appHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder ConfigureApp(string appHostConfig, Action<AppHostConfigurator> configure = null)
         {
             if (appHostConfig == null)
                 throw new ArgumentNullException(nameof(appHostConfig));
@@ -197,7 +197,7 @@ namespace Cogito.HostedWebCore
         /// <param name="appHostConfig"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureApp(Stream appHostConfig, Action<AppHostConfigurator> configure)
+        public AppHostBuilder ConfigureApp(Stream appHostConfig, Action<AppHostConfigurator> configure = null)
         {
             if (appHostConfig == null)
                 throw new ArgumentNullException(nameof(appHostConfig));
@@ -210,7 +210,7 @@ namespace Cogito.HostedWebCore
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public AppHostBuilder ConfigureApp(Action<AppHostConfigurator> configure)
+        public AppHostBuilder ConfigureApp(Action<AppHostConfigurator> configure = null)
         {
             using (var xml = File.OpenRead(DEFAULT_APP_CONFIG))
                 return ConfigureApp(xml, configure);

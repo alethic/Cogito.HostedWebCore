@@ -12,6 +12,13 @@
     </ServiceTypes>
 
     <CodePackage Name="Code" Version="1.0.0">
+        <SetupEntryPoint>
+            <ExeHost>
+                <Program>setup.bat</Program>
+                <WorkingFolder>CodePackage</WorkingFolder>
+                <ConsoleRedirection FileMaxSizeInKb="65536" FileRetentionCount="4" />
+            </ExeHost>
+        </SetupEntryPoint>
         <EntryPoint>
             <ExeHost>
                 <Program>Cogito.HostedWebCore.Tests.StatelessService.Fabric.exe</Program>
@@ -23,7 +30,7 @@
 
     <Resources>
         <Endpoints>
-            <Endpoint Name="ServiceEndpoint" Protocol="http" Type="Input" />
+            <Endpoint Name="ServiceEndpoint" UriScheme="http" Type="Input" />
         </Endpoints>
     </Resources>
     

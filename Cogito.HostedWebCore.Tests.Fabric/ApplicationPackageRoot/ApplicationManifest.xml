@@ -6,6 +6,10 @@
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="Cogito.HostedWebCore.Tests.StatelessService.FabricPkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
+    <Policies>
+      <RunAsPolicy CodePackageRef="Code" UserRef="SetupUser" EntryPointType="Setup" />
+      <RunAsPolicy CodePackageRef="Code" UserRef="WebUser" />
+    </Policies>
   </ServiceManifestImport>
   <DefaultServices>
     <Service Name="AppHost">
@@ -14,4 +18,18 @@
       </StatelessService>
     </Service>
   </DefaultServices>
+  <Principals>
+    <Users>
+      <User Name="SetupUser">
+        <MemberOf>
+          <SystemGroup Name="Administrators" />
+        </MemberOf>
+      </User>
+      <User Name="WebUser" LoadUserProfile="true" PerformInteractiveLogon="true">
+        <MemberOf>
+          <SystemGroup Name="Administrators" />
+        </MemberOf>
+      </User>
+    </Users>
+  </Principals>
 </ApplicationManifest>

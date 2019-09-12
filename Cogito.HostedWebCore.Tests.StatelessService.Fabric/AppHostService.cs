@@ -26,15 +26,30 @@ namespace Cogito.HostedWebCore.Tests.StatelessService.Fabric
 
         }
 
+        /// <summary>
+        /// Gets the standard system Web.config file.
+        /// </summary>
+        /// <returns></returns>
+        public static Stream OpenWebConfig() =>
+            typeof(AppHostService).Assembly.GetManifestResourceStream("Cogito.HostedWebCore.Tests.StatelessService.Fabric.Web.config");
+
+        /// <summary>
+        /// Gets the standard system ApplicationHost.config file.
+        /// </summary>
+        /// <returns></returns>
+        public static Stream OpenAppConfig() =>
+            typeof(AppHostService).Assembly.GetManifestResourceStream("Cogito.HostedWebCore.Tests.StatelessService.Fabric.ApplicationHost.config");
+
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
             yield return new ServiceInstanceListener(context =>
-                new AppHostCommunicationListener(context, "ServiceEndpoint", (protocol, bindingInformation, path, listener) =>
+                new AppHostCommunicationListener(context, "ServiceEndpoint", (bindings, path, listener) =>
                     new AppHostBuilder()
-                        .ConfigureApp(c => c
+                        .ConfigureWeb(OpenWebConfig())
+                        .ConfigureApp(OpenAppConfig(), c => c
                             .Site(1, s => s
                                 .RemoveBindings()
-                                .AddBinding(protocol, bindingInformation)
+                                .AddBindings(bindings)
                                 .Application(path, a => a
                                     .VirtualDirectory("/", v => v
                                         .UsePhysicalPath(Path.Combine(Path.GetDirectoryName(typeof(AppHostService).Assembly.Location), "site"))))))

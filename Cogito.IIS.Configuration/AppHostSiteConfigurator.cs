@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -79,6 +80,35 @@ namespace Cogito.IIS.Configuration
             BindingElement.Add(new XElement("binding",
                 new XAttribute("protocol", protocol),
                 new XAttribute("bindingInformation", bindingInformation)));
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the binding information on the site.
+        /// </summary>
+        /// <param name="binding"></param>
+        /// <returns></returns>
+        public AppHostSiteConfigurator AddBinding(BindingData binding)
+        {
+            if (binding is null)
+                throw new ArgumentNullException(nameof(binding));
+
+            return AddBinding(binding.Protocol, binding.BindingInformation);
+        }
+
+        /// <summary>
+        /// Sets the binding information on the site.
+        /// </summary>
+        /// <param name="bindings"></param>
+        /// <returns></returns>
+        public AppHostSiteConfigurator AddBindings(IEnumerable<BindingData> bindings)
+        {
+            if (bindings is null)
+                throw new ArgumentNullException(nameof(bindings));
+
+            foreach (var binding in bindings)
+                AddBinding(binding.Protocol, binding.BindingInformation);
 
             return this;
         }
