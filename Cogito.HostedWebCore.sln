@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cogito.HostedWebCore.Tests.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cogito.Web.Configuration", "Cogito.Web.Configuration\Cogito.Web.Configuration.csproj", "{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cogito.HostedWebCore.ServiceFabric.Setup", "Cogito.HostedWebCore.ServiceFabric.Setup\Cogito.HostedWebCore.ServiceFabric.Setup.csproj", "{3F150238-F274-4F6D-A873-9F9A0574C344}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,14 +82,6 @@ Global
 		{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}.Release|x64.ActiveCfg = Release|Any CPU
 		{6BDB235A-1A8F-4EF1-8DB2-E87F21A73B33}.Release|x64.Build.0 = Release|Any CPU
-		{3F150238-F274-4F6D-A873-9F9A0574C344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F150238-F274-4F6D-A873-9F9A0574C344}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3F150238-F274-4F6D-A873-9F9A0574C344}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{3F150238-F274-4F6D-A873-9F9A0574C344}.Debug|x64.Build.0 = Debug|Any CPU
-		{3F150238-F274-4F6D-A873-9F9A0574C344}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F150238-F274-4F6D-A873-9F9A0574C344}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3F150238-F274-4F6D-A873-9F9A0574C344}.Release|x64.ActiveCfg = Release|Any CPU
-		{3F150238-F274-4F6D-A873-9F9A0574C344}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
