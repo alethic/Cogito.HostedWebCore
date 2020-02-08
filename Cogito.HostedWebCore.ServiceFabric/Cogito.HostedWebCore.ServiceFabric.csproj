@@ -1,21 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>Cogito.HostedWebCore.ServiceFabric</PackageId>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Authors>Jerome Haltom</Authors>
-    <Company />
-    <Description>Service Fabric support for IIS Hosted Web Core.</Description>
-    <PackageIconUrl>https://cloverluxussc.blob.core.windows.net/public/cogito-nuget-icon.png</PackageIconUrl>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <Description>Service Fabric support for IIS Hosted Web Core.</Description>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.ServiceFabric.Services" Version="3.4.664" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.ServiceFabric.Services" Version="4.0.466" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Cogito.HostedWebCore\Cogito.HostedWebCore.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Cogito.HostedWebCore\Cogito.HostedWebCore.csproj" />
+    </ItemGroup>
 
 </Project>
