@@ -5,7 +5,7 @@
         <RepositoryUrl>https://github.com/alethic/Cogito.HostedWebCore</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageProjectUrl>https://github.com/alethic/Cogito.HostedWebCore</PackageProjectUrl>
-        <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageIcon>icon.png</PackageIcon>
         <PackageTags>iis hosted web asp.net</PackageTags>
         <LangVersion>8.0</LangVersion>
