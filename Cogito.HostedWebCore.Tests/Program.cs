@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Cogito.IIS.Configuration;
 using Cogito.Web.Configuration;
@@ -11,12 +13,12 @@ namespace Cogito.HostedWebCore.Tests
     public static class Program
     {
 
-        public static void Main()
+        public static Task Main()
         {
-            new AppHostBuilder()
+            return new AppHostBuilder()
+                .UseLogger(LoggerFactory.Create(b => b.AddSimpleConsole()).CreateLogger(""))
                 .SetAppConfigPath("%TEMP%\\ApplicationHost.config")
                 .SetWebConfigPath("%TEMP%\\Web.config")
-                .UseLogger(new LoggerFactory().AddConsole().CreateLogger(""))
                 .ConfigureWeb("Web.config", c => c
                     .SystemWeb(w => w
                         .Compilation(z => z.TempDirectory(Environment.ExpandEnvironmentVariables(@"%TEMP%\T")))))
@@ -33,7 +35,7 @@ namespace Cogito.HostedWebCore.Tests
                 .OnStarted(h => Console.WriteLine("Started"))
                 .OnStopped(h => Console.WriteLine("Stopped"))
                 .Build()
-                .Run();
+                .RunAsync();
         }
 
     }
